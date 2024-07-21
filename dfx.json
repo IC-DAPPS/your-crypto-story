@@ -1,0 +1,44 @@
+	{
+		"canisters": {
+			"backend": {
+				"type": "rust",
+				"package": "backend",
+				"candid": "src/distributed/backend/backend.did",
+				"declarations": {
+					"output": "src/declarations/backend"
+				},
+				"frontend": {},
+				"metadata": [
+					{
+						"name": "candid:service"
+					}
+				]
+			},
+			"frontend": {
+				"dependencies": [
+					"backend",
+					"internet-identity"
+				],
+				"frontend": {
+					"entrypoint": "build/index.html"
+				},
+				"source": [
+					"build/"
+				],
+				"type": "assets"
+			},
+			"internet-identity": {
+				"type": "pull",
+				"id": "rdmx6-jaaaa-aaaaa-aaadq-cai",
+				"frontend": {}
+			}
+		},
+		"defaults": {
+			"build": {
+				"args": "",
+				"packtool": ""
+			}
+		},
+		"output_env_file": ".env",
+		"version": 1
+	}
