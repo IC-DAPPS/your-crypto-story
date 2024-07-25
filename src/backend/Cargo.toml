@@ -12,4 +12,6 @@ crate-type = ["cdylib"]
 candid = "0.10.9"
 ic-cdk = "0.15.0"
 getrandom = { version = "0.2.15", features = ["js"] }
-
+ic-cdk-macros = "0.15.0"
+ic-stable-structures = "0.6.5"
+serde = { version = "1.0.204", features = ["derive"] }

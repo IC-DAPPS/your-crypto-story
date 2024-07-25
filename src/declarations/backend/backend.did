@@ -1,1 +1,26 @@
-service : { greet : (text) -> (text) query; whoami : () -> (text) query }
+type DeleteError = variant {
+  IndexOutOfBounds;
+  DidntFindUserData;
+  AnonymousCaller;
+};
+type GetUserDataError = variant { DidntFindUserData; AnonymousCaller };
+type PrincipalName = record { "principal" : principal; name : text };
+type Result = variant { Ok; Err : DeleteError };
+type Result_1 = variant { Ok : UserData; Err : GetUserDataError };
+type Result_2 = variant { Ok; Err : GetUserDataError };
+type UserData = record {
+  owned_principals : vec PrincipalName;
+  known_principals : vec PrincipalName;
+};
+service : {
+  delete_known_principal : (nat64) -> (Result);
+  delete_owned_principal : (nat64) -> (Result);
+  get_userdata : () -> (Result_1) query;
+  greet : (text) -> (text) query;
+  insert_known_principals : (vec PrincipalName) -> (Result_2);
+  insert_owned_principals : (vec PrincipalName) -> (Result_2);
+  insert_userdata : () -> (Result_2);
+  update_known_principal_name : (text, nat64) -> (Result);
+  update_owned_principal_name : (text, nat64) -> (Result);
+  whoami : () -> (text) query;
+}
