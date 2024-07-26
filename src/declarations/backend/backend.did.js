@@ -23,7 +23,6 @@ export const idlFactory = ({ IDL }) => {
     'delete_known_principal' : IDL.Func([IDL.Nat64], [Result], []),
     'delete_owned_principal' : IDL.Func([IDL.Nat64], [Result], []),
     'get_userdata' : IDL.Func([], [Result_1], ['query']),
-    'greet' : IDL.Func([IDL.Text], [IDL.Text], ['query']),
     'insert_known_principals' : IDL.Func(
         [IDL.Vec(PrincipalName)],
         [Result_2],
@@ -45,7 +44,6 @@ export const idlFactory = ({ IDL }) => {
         [Result],
         [],
       ),
-    'whoami' : IDL.Func([], [IDL.Text], ['query']),
   });
 };
 export const init = ({ IDL }) => { return []; };

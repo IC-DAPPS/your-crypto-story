@@ -22,13 +22,11 @@ export interface _SERVICE {
   'delete_known_principal' : ActorMethod<[bigint], Result>,
   'delete_owned_principal' : ActorMethod<[bigint], Result>,
   'get_userdata' : ActorMethod<[], Result_1>,
-  'greet' : ActorMethod<[string], string>,
   'insert_known_principals' : ActorMethod<[Array<PrincipalName>], Result_2>,
   'insert_owned_principals' : ActorMethod<[Array<PrincipalName>], Result_2>,
   'insert_userdata' : ActorMethod<[], Result_2>,
   'update_known_principal_name' : ActorMethod<[string, bigint], Result>,
   'update_owned_principal_name' : ActorMethod<[string, bigint], Result>,
-  'whoami' : ActorMethod<[], string>,
 }
 export declare const idlFactory: IDL.InterfaceFactory;
 export declare const init: (args: { IDL: typeof IDL }) => IDL.Type[];
