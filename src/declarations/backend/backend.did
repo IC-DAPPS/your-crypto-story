@@ -10,6 +10,8 @@ type Result_1 = variant { Ok : UserData; Err : GetUserDataError };
 type Result_2 = variant { Ok; Err : GetUserDataError };
 type UserData = record {
   owned_principals : vec PrincipalName;
+  name : text;
+  email : opt text;
   known_principals : vec PrincipalName;
 };
 service : {
@@ -18,7 +20,7 @@ service : {
   get_userdata : () -> (Result_1) query;
   insert_known_principals : (vec PrincipalName) -> (Result_2);
   insert_owned_principals : (vec PrincipalName) -> (Result_2);
-  insert_userdata : () -> (Result_2);
+  insert_userdata : (text, opt text) -> (Result_2);
   update_known_principal_name : (text, nat64) -> (Result);
   update_owned_principal_name : (text, nat64) -> (Result);
 }

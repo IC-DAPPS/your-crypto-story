@@ -28,6 +28,8 @@ impl PrincipalName {
 struct UserData {
     owned_principals: Vec<PrincipalName>,
     known_principals: Vec<PrincipalName>,
+    name: String,
+    email: Option<String>,
 }
 
 type Memory = VirtualMemory<DefaultMemoryImpl>;
@@ -113,7 +115,7 @@ fn get_userdata() -> Result<UserData, GetUserDataError> {
 }
 
 #[ic_cdk::update]
-fn insert_userdata() -> Result<(), GetUserDataError> {
+fn insert_userdata(name: String, email: Option<String>) -> Result<(), GetUserDataError> {
     let caller: Principal = ic_cdk::caller();
     let anonymous = Principal::anonymous();
 
@@ -122,11 +124,13 @@ fn insert_userdata() -> Result<(), GetUserDataError> {
     }
 
     match get_mut(caller) {
-        Some(user_data) => Ok(()),
+        Some(_user_data) => Ok(()),
         None => {
             let new_user_data = UserData {
                 owned_principals: Vec::new(),
                 known_principals: Vec::new(),
+                name,
+                email,
             };
             insert(caller, new_user_data);
             Ok(())

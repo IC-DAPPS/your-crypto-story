@@ -11,6 +11,8 @@ export const idlFactory = ({ IDL }) => {
   });
   const UserData = IDL.Record({
     'owned_principals' : IDL.Vec(PrincipalName),
+    'name' : IDL.Text,
+    'email' : IDL.Opt(IDL.Text),
     'known_principals' : IDL.Vec(PrincipalName),
   });
   const GetUserDataError = IDL.Variant({
@@ -33,7 +35,7 @@ export const idlFactory = ({ IDL }) => {
         [Result_2],
         [],
       ),
-    'insert_userdata' : IDL.Func([], [Result_2], []),
+    'insert_userdata' : IDL.Func([IDL.Text, IDL.Opt(IDL.Text)], [Result_2], []),
     'update_known_principal_name' : IDL.Func(
         [IDL.Text, IDL.Nat64],
         [Result],
