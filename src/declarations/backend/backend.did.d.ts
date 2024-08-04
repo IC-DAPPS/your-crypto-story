@@ -16,6 +16,8 @@ export type Result_2 = { 'Ok' : null } |
   { 'Err' : GetUserDataError };
 export interface UserData {
   'owned_principals' : Array<PrincipalName>,
+  'name' : string,
+  'email' : [] | [string],
   'known_principals' : Array<PrincipalName>,
 }
 export interface _SERVICE {
@@ -24,7 +26,7 @@ export interface _SERVICE {
   'get_userdata' : ActorMethod<[], Result_1>,
   'insert_known_principals' : ActorMethod<[Array<PrincipalName>], Result_2>,
   'insert_owned_principals' : ActorMethod<[Array<PrincipalName>], Result_2>,
-  'insert_userdata' : ActorMethod<[], Result_2>,
+  'insert_userdata' : ActorMethod<[string, [] | [string]], Result_2>,
   'update_known_principal_name' : ActorMethod<[string, bigint], Result>,
   'update_owned_principal_name' : ActorMethod<[string, bigint], Result>,
 }
