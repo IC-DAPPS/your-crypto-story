@@ -7,7 +7,4 @@
 <slot />
 
 <style lang="postcss" global>
-	:global(html) {
-		background-color: theme(colors.gray.400);
-	}
 </style>
