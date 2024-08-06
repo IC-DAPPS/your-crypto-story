@@ -10,19 +10,20 @@
 	import UserMenu from '$lib/components/UserMenu.svelte';
 	import DarkMode from 'flowbite-svelte/DarkMode.svelte';
 	import DarkModeButton from '$lib/components/DarkModeButton.svelte';
+	import { userStore } from '$lib/stores/user.store';
 
 	$: activeUrl = $page.url.pathname;
 </script>
 
 <Navbar class="border-b border-primary-400">
-	<NavBrand href="/">
+	<NavBrand href={$userStore.isRegistered ? '/' : ''}>
 		<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
 			>Your Crypto Story</span
 		>
 	</NavBrand>
 	<div class="flex items-center md:order-2">
 		<DarkModeButton btnClass="hidden md:block p-2 mr-3" />
-		{#if $authStore.isAuthenticated}
+		{#if $authStore.isAuthenticated && $userStore.isRegistered}
 			<UserMenu />
 		{:else}
 			<Button on:click={authStore.signIn}>Log in</Button>
@@ -31,10 +32,14 @@
 	</div>
 
 	<NavUl {activeUrl}>
-		<NavLi href="/" active={true}>Home</NavLi>
-		<NavLi href="/transactions">Transactions</NavLi>
-		<NavLi href="/portfolio">Portfolio</NavLi>
-		<NavLi href="/story">Your story</NavLi>
+		{#if $userStore.isRegistered}
+			<NavLi href="/" active={true}>Home</NavLi>
+			<NavLi href="/transactions/">Transactions</NavLi>
+			<NavLi href="/portfolio/">Portfolio</NavLi>
+			<NavLi href="/story/">Your story</NavLi>
+		{:else}
+			<NavLi href="/register/">Register</NavLi>
+		{/if}
 		<DarkMode
 			btnClass="hidden max-md:block ml-3 rounded-full p-2 px-6 w-fit border-2 border-primary-200 text-primary-500 dark:border-white dark:text-white"
 		/>
