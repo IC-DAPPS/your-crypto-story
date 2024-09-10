@@ -25,6 +25,8 @@
 		<DarkModeButton btnClass="hidden md:block p-2 mr-3" />
 		{#if $authStore.isAuthenticated && $userStore.isRegistered}
 			<UserMenu />
+		{:else if $authStore.isAuthenticated && !$userStore.isRegistered}
+			<Button color="alternative" on:click={authStore.signOut}>Log out</Button>
 		{:else}
 			<Button on:click={authStore.signIn}>Log in</Button>
 		{/if}
@@ -37,7 +39,7 @@
 			<NavLi href="/transactions/">Transactions</NavLi>
 			<NavLi href="/portfolio/">Portfolio</NavLi>
 			<NavLi href="/story/">Your story</NavLi>
-		{:else}
+		{:else if !$userStore.isRegistered && $authStore.isAuthenticated}
 			<NavLi href="/register/">Register</NavLi>
 		{/if}
 		<DarkMode

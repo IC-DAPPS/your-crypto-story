@@ -4,6 +4,7 @@ import type { IcrcTokenMetadataResponse } from '@dfinity/ledger-icrc';
 import type { Principal } from '@dfinity/principal';
 import { writable, type Writable, get } from 'svelte/store';
 
+// Key = Index canister Id value = Metada+ledgerId
 type LedgerMetadataMap = Map<
 	string,
 	{ id: Principal; symbol: string; name: string; decimals: number; fee: number; logo: string }
@@ -79,13 +80,14 @@ function createLedgerMetadataStore(): LedgerMetadataStore {
 
 			ListOfIndexCanisterIds.forEach(async (canisterId) => {
 				const { ledgerId } = getIcrcIndexCanister(canisterId);
-				const id: Principal = await ledgerId({});
+				const id: Principal = await ledgerId({ certified: false });
 				const { metadata } = getIcrcLedgerCanister(id);
-				const data = await metadata({});
+				const data = await metadata({ certified: false });
 				const value = parseIcrcMetadata(data, id);
 				ledgerMetadataMap.set(canisterId, value);
 			});
 			store.set(ledgerMetadataMap);
+			console.log('ledgerMetadataMap', ledgerMetadataMap);
 		}
 	};
 }

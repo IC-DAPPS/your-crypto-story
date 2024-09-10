@@ -12,22 +12,23 @@ const getAgent = async (identity: Identity): Promise<Agent> => {
 	});
 };
 
-let agent = await getAgent(get(authStore).identity);
-
-authStore.subscribe(async (value) => {
-	agent = await getAgent(value.identity);
-});
-
-export const getIcrcIndexCanister = (canisterId: string): IcrcIndexNgCanister => {
+export const getIcrcIndexActor = async (
+	identity: Identity,
+	canisterId: string
+): Promise<IcrcIndexNgCanister> => {
 	return IcrcIndexNgCanister.create({
-		agent,
+		agent: await getAgent(identity),
 		canisterId: Principal.fromText(canisterId)
 	});
 };
 
-export const getIcrcLedgerCanister = (canisterId: Principal): IcrcLedgerCanister => {
+export const getIcrcIndexCanister = async (canisterId: string): Promise<IcrcIndexNgCanister> => {
+	return await getIcrcIndexActor(get(authStore).identity, canisterId);
+};
+
+export const getIcrcLedgerCanister = async (canisterId: Principal): Promise<IcrcLedgerCanister> => {
 	return IcrcLedgerCanister.create({
-		agent,
+		agent: await getAgent(get(authStore).identity),
 		canisterId
 	});
 };

@@ -3,7 +3,6 @@ import type { _SERVICE } from '../../../../declarations/backend/backend.did';
 import { writable, type Readable } from 'svelte/store';
 import { AuthClient } from '@dfinity/auth-client';
 import { getActor } from '../actor';
-import { goto } from '$app/navigation';
 import { userSyncAndNavigation } from './user.store';
 
 export interface AuthStoreData {
