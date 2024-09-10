@@ -31,6 +31,9 @@ const config = {
 			serviceWorker: filesPath('src/service-worker'),
 			appTemplate: filesPath('src/app.html'),
 			errorTemplate: filesPath('src/error.html')
+		},
+		alias: {
+			'@/*': './src/frontend/src/lib/*'
 		}
 	},
 	serviceWorker: {
