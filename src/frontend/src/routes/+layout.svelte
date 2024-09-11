@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../app.css';
+	import { ModeWatcher } from 'mode-watcher';
 	import NavBar from '$lib/components/NavBar.svelte';
 	import { transactionStore } from '$lib/stores/transactions.store';
 	import { onDestroy } from 'svelte';
@@ -32,6 +33,7 @@
 	onDestroy(unsubscribe4);
 </script>
 
+<ModeWatcher />
 <NavBar />
 <slot />
 
