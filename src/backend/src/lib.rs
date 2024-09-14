@@ -64,6 +64,7 @@ fn insert_owned_principals(
                 for principal_name in owned_principals_arg {
                     user_data.owned_principals.push(principal_name);
                 }
+                storage::insert(caller, user_data);
                 Ok(())
             }
         }
@@ -88,6 +89,7 @@ fn insert_known_principals(
                 for principal_name in known_principals_arg {
                     user_data.known_principals.push(principal_name);
                 }
+                storage::insert(caller, user_data);
                 Ok(())
             }
         }
@@ -107,6 +109,7 @@ fn delete_owned_principal(index: usize) -> Result<(), DeleteError> {
         Some(mut user_data) => {
             if index < user_data.owned_principals.len() {
                 user_data.owned_principals.remove(index);
+                storage::insert(caller, user_data);
                 Ok(())
             } else {
                 Err(DeleteError::IndexOutOfBounds)
@@ -128,6 +131,7 @@ fn delete_known_principal(index: usize) -> Result<(), DeleteError> {
         Some(mut user_data) => {
             if index < user_data.known_principals.len() {
                 user_data.known_principals.remove(index);
+                storage::insert(caller, user_data);
                 Ok(())
             } else {
                 Err(DeleteError::IndexOutOfBounds)
@@ -149,6 +153,7 @@ fn update_owned_principal_name(new_name: String, index: usize) -> Result<(), Upd
         Some(mut user_data) => {
             if index < user_data.owned_principals.len() {
                 user_data.owned_principals[index].update_name(new_name);
+                storage::insert(caller, user_data);
                 Ok(())
             } else {
                 Err(UpdateError::IndexOutOfBounds)
@@ -170,6 +175,7 @@ fn update_known_principal_name(new_name: String, index: usize) -> Result<(), Upd
         Some(mut user_data) => {
             if index < user_data.known_principals.len() {
                 user_data.known_principals[index].update_name(new_name);
+                storage::insert(caller, user_data);
                 Ok(())
             } else {
                 Err(UpdateError::IndexOutOfBounds)
