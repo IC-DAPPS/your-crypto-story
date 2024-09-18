@@ -14,6 +14,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
+    "test:pocket-ic": "cargo test --package my-pocket-ic-tests",
     "test": "playwright test --project=chromium",
     "test:card": "playwright test card.spec.ts --headed --project=chromium",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",

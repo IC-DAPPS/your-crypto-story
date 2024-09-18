@@ -1,0 +1,11 @@
+[package]
+name = "my-pocket-ic-tests"
+version = "0.1.0"
+edition.workspace = true
+
+[dev-dependencies]
+candid.workspace = true
+ic-agent = { workspace = true, features = ["pem"] }
+lazy_static.workspace = true 
+pocket-ic.workspace = true
+backend = { workspace = true, features = [] }

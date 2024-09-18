@@ -1,11 +1,11 @@
 use candid::Principal;
 
-mod error;
-mod model;
-mod storage;
+pub mod error;
+pub mod model;
+pub mod storage;
 
-use error::{DeleteError, GetUserDataError, UpdateError};
-use model::{PrincipalName, UserData};
+pub use error::{DeleteError, GetUserDataError, UpdateError};
+pub use model::{PrincipalName, UserData};
 
 #[ic_cdk::query]
 fn get_userdata() -> Result<UserData, GetUserDataError> {

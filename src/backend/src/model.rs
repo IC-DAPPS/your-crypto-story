@@ -6,7 +6,7 @@ use ic_stable_structures::DefaultMemoryImpl;
 use serde::{Deserialize, Serialize};
 use std::borrow::Cow;
 
-#[derive(candid::CandidType, Clone, Serialize, Deserialize)]
+#[derive(candid::CandidType, Clone, Serialize, Debug, Deserialize)]
 pub struct PrincipalName {
     pub principal: Principal,
     pub name: String,
@@ -19,7 +19,7 @@ impl PrincipalName {
     pub fn update_name_push() {}
 }
 
-#[derive(candid::CandidType, Clone, Serialize, Deserialize, Default)]
+#[derive(candid::CandidType, Clone, Serialize, Debug, Deserialize, Default)]
 pub struct UserData {
     pub owned_principals: Vec<PrincipalName>,
     pub known_principals: Vec<PrincipalName>,
