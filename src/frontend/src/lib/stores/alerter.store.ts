@@ -3,6 +3,7 @@ import { type Writable, writable } from 'svelte/store';
 export interface AlerterStoreData {
 	level?: 'primary' | 'success' | 'error' | 'info' | 'warn';
 	message: string;
+	title?: string;
 	showAlert: boolean;
 }
 
@@ -10,6 +11,7 @@ export interface AlerterStore extends Writable<AlerterStoreData[]> {
 	show: (arg: {
 		level?: 'primary' | 'success' | 'error' | 'info' | 'warn';
 		message: string;
+		title?: string;
 	}) => void;
 	remove: (index: number) => void;
 }
@@ -21,9 +23,13 @@ const init = (): AlerterStore => {
 		subscribe,
 		set,
 		update,
-		show: (arg: { level?: 'primary' | 'success' | 'error' | 'info' | 'warn'; message: string }) => {
+		show: (arg: {
+			level?: 'primary' | 'success' | 'error' | 'info' | 'warn';
+			message: string;
+			title?: string;
+		}) => {
 			update((alerts: AlerterStoreData[]) => {
-				return [{ showAlert: true, level: arg.level, message: arg.message }, ...alerts];
+				return [{ showAlert: true, ...arg }, ...alerts];
 			});
 		},
 		remove: (index: number) => {

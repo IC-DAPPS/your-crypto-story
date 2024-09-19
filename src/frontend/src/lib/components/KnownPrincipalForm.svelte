@@ -1,18 +1,16 @@
 <script lang="ts">
+	import { Input } from '$lib/components/ui/input/index.js';
+	import { Label } from '$lib/components/ui/label/index.js';
+	import { Button } from '$lib/components/ui/button/index.js';
 	import { createEventDispatcher } from 'svelte';
-	import { fly } from 'svelte/transition';
-	import { flip } from 'svelte/animate';
-	import { backInOut } from 'svelte/easing';
+	import { fly, fade, slide, type TransitionConfig } from 'svelte/transition';
+	import { cubicOut } from 'svelte/easing';
 	import { alerterStore } from '$lib/stores/alerter.store';
 	import { authStore } from '$lib/stores/auth.store';
 	import type { PrincipalName, Result_2 } from '../../../../declarations/backend/backend.did';
-	import Label from 'flowbite-svelte/Label.svelte';
-	import Input from 'flowbite-svelte/Input.svelte';
-	import Button from 'flowbite-svelte/Button.svelte';
-	import Helper from 'flowbite-svelte/Helper.svelte';
 	import { Principal } from '@dfinity/principal';
-	import CloseCircleOutline from 'flowbite-svelte-icons/CloseCircleOutline.svelte';
-	import Spinner from 'flowbite-svelte/Spinner.svelte';
+	import { CircleX } from 'lucide-svelte';
+	import ButtonWithSpinner from './ButtonWithSpinner.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -110,7 +108,7 @@
 		updateButtonState();
 	}
 
-	async function insertOwnedPrincipal() {
+	async function insertKnownPrincipal() {
 		updateButtonState();
 		let knownPrincipals: PrincipalName[] = [];
 		for (let value of groupOfValue) {
@@ -164,53 +162,60 @@
 
 	let spinnerOn = false;
 	export let complete = false;
+
+	function smoothFly(
+		node: Element,
+		{ delay = 0, duration = 400 }: { delay?: number; duration?: number }
+	): TransitionConfig {
+		return {
+			delay,
+			duration,
+			css: (t: number) => {
+				const eased = cubicOut(t);
+				return `
+          opacity: ${eased};
+          transform: translateY(${(1 - eased) * 20}px)
+        `;
+			}
+		};
+	}
 </script>
 
 <div
-	class="flex items-center flex-col mt-2"
+	class="mt-2 flex flex-col items-center"
 	in:fly={{ x: '-100%', duration: 500, delay: 380 }}
-	out:fly={{ x: '100%', duration: 500 }}
+	out:fly={{ x: '100%', duration: 400 }}
 >
-	<div class="max-w-xl w-full">
-		<p
-			class="text-sm font-medium text-primary-800 dark:text-primary-200 max-sm:px-3 mb-2 text-start primary"
-		>
+	<div class="w-full max-w-xl">
+		<p class="mb-2 text-start text-sm font-medium max-sm:px-3">
 			Add known Principals such as friends, family, organizations, or platforms.
 		</p>
 	</div>
-
-	<div class="flex justify-between max-w-xl w-full max-sm:px-3">
-		<Button class="border-primary-500 border-2" color="alternative" on:click={addNewAccount}
-			>Add new
-		</Button>
-		<div>
-			<Button disabled={buttonDisabled || spinnerOn} on:click={insertOwnedPrincipal}>
-				{#if spinnerOn}
-					<Spinner class="me-3 dark:text-white" size="4" />Submitting...
-				{:else}
-					Submit
-				{/if}
+	<hr />
+	<div class="flex w-full max-w-xl justify-between max-sm:px-3">
+		<Button variant="outline" on:click={addNewAccount}>Add new</Button>
+		<div class="flex">
+			<ButtonWithSpinner class="w-24" disabled={buttonDisabled} onClick={insertKnownPrincipal}>
+				Submit
+			</ButtonWithSpinner>
+			<Button class="ml-2 w-24" variant="secondary" disabled={spinnerOn} on:click={skipStep}>
+				Skip
 			</Button>
-			<Button color="light" disabled={spinnerOn} on:click={skipStep}>Skip</Button>
 		</div>
 	</div>
 	{#each groupOfValue as value, index (index)}
 		<div
 			id="value-div"
-			class="m-6 max-w-xl w-full border p-3 rounded"
-			in:fly={{ y: '100vh', duration: 500 }}
-			out:fly={{ x: '100%', duration: 500 }}
-			animate:flip={{ duration: 700, delay: 300, easing: backInOut }}
+			class="m-6 w-full max-w-xl rounded border p-3"
+			in:smoothFly={{ delay: index * 100, duration: 400 }}
+			out:fade={{ duration: 300 }}
 		>
-			<div class="flex justify-between mb-2">
+			<div class="mb-2 flex justify-between">
 				<Label for="principal-input-{index}" class="block"
 					>Your Principal <span class="text-red-500">*</span>
 				</Label>
 
-				<button
-					class="hover:animate-bounce dark:text-primary-50"
-					on:click={() => deleteValue(index)}><CloseCircleOutline /></button
-				>
+				<button class="" on:click={() => deleteValue(index)}><CircleX /></button>
 			</div>
 			<Input
 				type="text"
@@ -219,12 +224,13 @@
 				bind:value={value.principal}
 				on:input={() => handleInputs(value, 'principal')}
 				on:blur={() => handleInputs(value, 'principal')}
-				color={shouldShowPrincipalError(value, index) ? 'red' : 'base'}
 			/>
 			{#if shouldShowPrincipalError(value, index)}
-				<Helper class="mt-2" color="red">{getPrincipalErrorMessage(value.principal, index)}</Helper>
+				<p class="mt-2 text-sm text-muted-foreground" transition:slide|local={{ duration: 200 }}>
+					{getPrincipalErrorMessage(value.principal, index)}
+				</p>
 			{/if}
-			<Label for="name-input-{index}" class="block mb-2 mt-3">
+			<Label for="name-input-{index}" class="mb-2 mt-3 block">
 				Account Name | Platform Name <span class="text-red-500">*</span>
 			</Label>
 			<Input
@@ -234,11 +240,11 @@
 				bind:value={value.name}
 				on:input={() => handleInputs(value, 'name')}
 				on:blur={() => handleInputs(value, 'name')}
-				maxlength="60"
-				color={shouldShowNameError(value) ? 'red' : 'base'}
 			/>
 			{#if shouldShowNameError(value)}
-				<Helper class="mt-2" color="red">{getNameErrorMessage(value.name)}</Helper>
+				<p class="mt-2 text-sm text-muted-foreground" transition:slide|local={{ duration: 200 }}>
+					{getNameErrorMessage(value.name)}
+				</p>
 			{/if}
 		</div>
 	{/each}
