@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import Avatar from 'flowbite-svelte/Avatar.svelte';
 	import Dropdown from 'flowbite-svelte/Dropdown.svelte';
 	import DropdownItem from 'flowbite-svelte/DropdownItem.svelte';
@@ -15,9 +15,9 @@
 	</DropdownHeader>
 	<DropdownItem>Your Principals</DropdownItem>
 	<DropdownItem>Known Principals</DropdownItem>
-	<!-- <DropdownItem>Dashboard</DropdownItem> -->
+
 	<DropdownItem>Settings</DropdownItem>
-	<!-- <DropdownItem>Earnings</DropdownItem> -->
+
 	<DropdownDivider />
 	<DropdownItem on:click={authStore.signOut}>Sign out</DropdownItem>
-</Dropdown>
+</Dropdown> -->

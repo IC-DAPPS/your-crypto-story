@@ -1,5 +1,5 @@
 import { ListOfIndexCanisterIds } from '$lib/canisterIds';
-import { getIcrcIndexCanister, getIcrcLedgerCanister } from '$lib/icrc';
+import { getIcrcIndexCanister, getIcrcLedgerCanister } from '$lib/icrc-index';
 import type { IcrcTokenMetadataResponse } from '@dfinity/ledger-icrc';
 import type { Principal } from '@dfinity/principal';
 import { writable, type Writable, get } from 'svelte/store';
@@ -79,9 +79,9 @@ function createLedgerMetadataStore(): LedgerMetadataStore {
 			const ledgerMetadataMap: LedgerMetadataMap = get(store);
 
 			ListOfIndexCanisterIds.forEach(async (canisterId) => {
-				const { ledgerId } = getIcrcIndexCanister(canisterId);
+				const { ledgerId } = await getIcrcIndexCanister(canisterId);
 				const id: Principal = await ledgerId({ certified: false });
-				const { metadata } = getIcrcLedgerCanister(id);
+				const { metadata } = await getIcrcLedgerCanister(id);
 				const data = await metadata({ certified: false });
 				const value = parseIcrcMetadata(data, id);
 				ledgerMetadataMap.set(canisterId, value);
@@ -93,5 +93,3 @@ function createLedgerMetadataStore(): LedgerMetadataStore {
 }
 
 export const ledgerMetadataStore = createLedgerMetadataStore();
-
-await ledgerMetadataStore.sync();

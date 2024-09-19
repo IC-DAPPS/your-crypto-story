@@ -3,10 +3,18 @@
 	import { ModeWatcher } from 'mode-watcher';
 	import NavBar from '$lib/components/NavBar.svelte';
 	import { transactionStore } from '$lib/stores/transactions.store';
-	import { onDestroy } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { userStore } from '$lib/stores/user.store';
 	import { ledgerMetadataStore } from '$lib/stores/ledgerMetadata.store';
 	import { authStore } from '$lib/stores/auth.store';
+	import { goto } from '$app/navigation';
+
+	onMount(async () => {
+		goto('/transactions');
+		goto('/');
+
+		await ledgerMetadataStore.sync();
+	});
 
 	const unsubscribe1 = authStore.subscribe((value) => {
 		console.log('subscribe authStore', value);
@@ -35,6 +43,7 @@
 
 <ModeWatcher />
 <NavBar />
+
 <slot />
 
 <style lang="postcss" global>

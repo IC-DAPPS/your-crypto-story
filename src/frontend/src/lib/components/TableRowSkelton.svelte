@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import TableBodyCell from 'flowbite-svelte/TableBodyCell.svelte';
 	import TableBodyRow from 'flowbite-svelte/TableBodyRow.svelte';
 </script>
@@ -61,4 +61,4 @@
 			class="w-[471.4px] h-2 my-[7.5px] bg-slate-200 dark:bg-slate-700 rounded"
 		></div></TableBodyCell
 	>
-</TableBodyRow>
+</TableBodyRow> -->

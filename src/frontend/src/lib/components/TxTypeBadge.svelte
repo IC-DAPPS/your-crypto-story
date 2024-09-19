@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import SortHorizontalOutline from 'flowbite-svelte-icons/SortHorizontalOutline.svelte';
 	import FireOutline from 'flowbite-svelte-icons/FireOutline.svelte';
 	import LandmarkOutline from 'flowbite-svelte-icons/LandmarkOutline.svelte';
@@ -16,4 +16,4 @@
 	<Badge color="red"><FireOutline class="h-4" />Burn</Badge>
 {:else if type === 'Approve'}
 	<Badge color="yellow"><BadgeCheckOutline class="h-4" />Approve</Badge>
-{/if}
+{/if} -->
