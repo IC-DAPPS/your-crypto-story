@@ -13,7 +13,7 @@ dfx deps deploy
 
 # Run Cargo tests to generate Candid file
 echo "Running Cargo tests to generate Candid file..."
-cargo test
+cargo test -p backend generate_candid
 sleep 5
 # Deploy Backend Canister
 echo "Deploying Backend Canister..."

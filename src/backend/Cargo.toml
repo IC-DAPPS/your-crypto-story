@@ -6,12 +6,16 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
-crate-type = ["cdylib"]
+path = "src/lib.rs"
+crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-candid = "0.10.9"
-ic-cdk = "0.15.0"
-getrandom = { version = "0.2.15", features = ["js"] }
-ic-cdk-macros = "0.15.0"
-ic-stable-structures = "0.6.5"
-serde = { version = "1.0.204", features = ["derive"] }
+candid.workspace = true
+ic-cdk.workspace = true
+ic-cdk-macros.workspace = true
+serde.workspace = true
+getrandom.workspace = true
+ic-stable-structures.workspace = true
+
+[features]
+default = []
