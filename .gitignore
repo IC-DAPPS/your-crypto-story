@@ -17,3 +17,4 @@ target
 /blob-report/
 /playwright/.cache/
 .zed
+**/pocket-ic
