@@ -3,6 +3,7 @@ use backend::error::GetUserDataError;
 use backend::{DeleteError, PrincipalName, UpdateError};
 use candid::Principal;
 
+// Test inserting user data
 #[test]
 fn test_insert_userdata() {
     let api = BackendApi::new();
@@ -32,7 +33,7 @@ fn test_insert_userdata() {
     println!("Test completed successfully");
 }
 
-// Test for inserting owned principals
+// Test inserting owned principals
 #[test]
 fn test_insert_owned_principals() {
     let api = BackendApi::new();
@@ -60,7 +61,7 @@ fn test_insert_owned_principals() {
     println!("Insert owned principals test completed successfully");
 }
 
-// Test for inserting known principals
+// Test inserting known principals
 #[test]
 fn test_insert_known_principals() {
     let api = BackendApi::new();
@@ -88,7 +89,7 @@ fn test_insert_known_principals() {
     println!("Insert known principals test completed successfully");
 }
 
-// Test for deleting owned principal
+// Test deleting owned principal
 #[test]
 fn test_delete_owned_principal() {
     let api = BackendApi::new();
@@ -106,7 +107,7 @@ fn test_delete_owned_principal() {
     println!("Delete owned principal test completed successfully");
 }
 
-// Test for deleting known principal
+// Test deleting known principal
 #[test]
 fn test_delete_known_principal() {
     let api = BackendApi::new();
@@ -124,7 +125,7 @@ fn test_delete_known_principal() {
     println!("Delete known principal test completed successfully");
 }
 
-// Test for updating owned principal name
+// Test updating owned principal name
 #[test]
 fn test_update_owned_principal_name() {
     let api = BackendApi::new();
@@ -142,7 +143,7 @@ fn test_update_owned_principal_name() {
     println!("Update owned principal name test completed successfully");
 }
 
-// Test for updating known principal name
+// Test updating known principal name
 #[test]
 fn test_update_known_principal_name() {
     let api = BackendApi::new();
@@ -158,4 +159,78 @@ fn test_update_known_principal_name() {
     );
 
     println!("Update known principal name test completed successfully");
+}
+
+// Test inserting empty owned principals list
+#[test]
+fn test_insert_empty_owned_principals() {
+    let api = BackendApi::new();
+    let empty_principals = vec![];
+    let result = api.insert_owned_principals(empty_principals);
+    assert!(
+        matches!(result, Err(GetUserDataError::AnonymousCaller)),
+        "Expected AnonymousCaller error, but got: {:?}",
+        result
+    );
+}
+
+// Test inserting empty known principals list
+#[test]
+fn test_insert_empty_known_principals() {
+    let api = BackendApi::new();
+    let empty_principals = vec![];
+    let result = api.insert_known_principals(empty_principals);
+    assert!(
+        matches!(result, Err(GetUserDataError::AnonymousCaller)),
+        "Expected AnonymousCaller error, but got: {:?}",
+        result
+    );
+}
+
+// Test deleting out-of-bounds owned principal
+#[test]
+fn test_delete_out_of_bounds_owned_principal() {
+    let api = BackendApi::new();
+    let result = api.delete_owned_principal(999); // Using a large index
+    assert!(
+        matches!(result, Err(DeleteError::AnonymousCaller)),
+        "Expected AnonymousCaller error, but got: {:?}",
+        result
+    );
+}
+
+// Test deleting out-of-bounds known principal
+#[test]
+fn test_delete_out_of_bounds_known_principal() {
+    let api = BackendApi::new();
+    let result = api.delete_known_principal(999); // Using a large index
+    assert!(
+        matches!(result, Err(DeleteError::AnonymousCaller)),
+        "Expected AnonymousCaller error, but got: {:?}",
+        result
+    );
+}
+
+// Test updating out-of-bounds owned principal name
+#[test]
+fn test_update_out_of_bounds_owned_principal_name() {
+    let api = BackendApi::new();
+    let result = api.update_owned_principal_name("new_name".to_string(), 999); // Using a large index
+    assert!(
+        matches!(result, Err(UpdateError::AnonymousCaller)),
+        "Expected AnonymousCaller error, but got: {:?}",
+        result
+    );
+}
+
+// Test updating out-of-bounds known principal name
+#[test]
+fn test_update_out_of_bounds_known_principal_name() {
+    let api = BackendApi::new();
+    let result = api.update_known_principal_name("new_name".to_string(), 999); // Using a large index
+    assert!(
+        matches!(result, Err(UpdateError::AnonymousCaller)),
+        "Expected AnonymousCaller error, but got: {:?}",
+        result
+    );
 }
