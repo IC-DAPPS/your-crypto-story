@@ -1,7 +1,7 @@
 <script>
-	import KnownPrincipalForm from '$lib/components/KnownPrincipalForm.svelte';
-	import NameEmailForm from '$lib/components/NameEmailForm.svelte';
-	import OwnedPrincipalForm from '$lib/components/OwnedPrincipalForm.svelte';
+	import KnownPrincipalForm from '@components/register/KnownPrincipalForm.svelte';
+	import NameEmailForm from '@components/register/NameEmailForm.svelte';
+	import OwnedPrincipalForm from '@components/register/OwnedPrincipalForm.svelte';
 	import Alerter from '$lib/components/Alerter.svelte';
 	import { fly } from 'svelte/transition';
 	import { goto } from '$app/navigation';
@@ -20,7 +20,7 @@
 <Alerter />
 <div in:fly={{ x: '-100%', duration: 500 }}>
 	<h2
-		class="mb-2 mt-6 mx-6 text-3xl max-md:text-2xl text-primary-900 dark:text-sky-100 text-center font-display tracking-wide leading-relaxed"
+		class="text-primary-900 font-display mx-6 mb-2 mt-6 text-center text-3xl leading-relaxed tracking-wide dark:text-sky-100 max-md:text-2xl"
 		in:fly={{ y: '-100vh', duration: 500 }}
 		out:fly={{ y: '-40', duration: 500 }}
 	>

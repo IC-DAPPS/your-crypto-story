@@ -1,7 +1,7 @@
 <script lang="ts">
-	import * as Alert from '$lib/components/ui/alert/index.js';
+	import * as Alert from '@components/ui/alert/index.js';
 	import { slide } from 'svelte/transition';
-	import { alerterStore } from '$lib/stores/alerter.store';
+	import { alerterStore } from '@stores/alerter.store';
 	import { CircleCheck, Info, CircleX, BellRing, CircleAlert, X } from 'lucide-svelte';
 
 	function removeAlert(index: number) {

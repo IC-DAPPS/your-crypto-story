@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import type { UserData } from '../../../../declarations/backend/backend.did';
-import { getUserData } from '$lib/api';
+// import { getUserData } from '$lib/api';
 import { alerterStore } from './alerter.store';
 import { goto } from '$app/navigation';
 
@@ -21,13 +21,13 @@ export const userStore = writable<UserStoreData>({
 
 export async function userSyncAndNavigation() {
 	try {
-		const result = await getUserData();
-		if ('Ok' in result) {
-			userStore.set({ isRegistered: true, userData: result.Ok });
-			goto('/');
-		} else {
-			goto('/register/');
-		}
+		// const result = await getUserData();
+		// if ('Ok' in result) {
+		// 	userStore.set({ isRegistered: true, userData: result.Ok });
+		// 	goto('/');
+		// } else {
+		// 	goto('/register/');
+		// }
 	} catch (error) {
 		console.error(error);
 		alerterStore.show({ level: 'error', message: "Can't Communicate with Backend." });
@@ -36,20 +36,20 @@ export async function userSyncAndNavigation() {
 
 export async function userSync() {
 	try {
-		const result = await getUserData();
-		if ('Ok' in result) {
-			userStore.set({ isRegistered: true, userData: result.Ok });
-		} else {
-			userStore.set({
-				isRegistered: false,
-				userData: {
-					owned_principals: [],
-					name: '',
-					email: [],
-					known_principals: []
-				}
-			});
-		}
+		// const result = await getUserData();
+		// if ('Ok' in result) {
+		// 	userStore.set({ isRegistered: true, userData: result.Ok });
+		// } else {
+		// 	userStore.set({
+		// 		isRegistered: false,
+		// 		userData: {
+		// 			owned_principals: [],
+		// 			name: '',
+		// 			email: [],
+		// 			known_principals: []
+		// 		}
+		// 	});
+		// }
 	} catch (error) {
 		console.error(error);
 		userStore.set({
