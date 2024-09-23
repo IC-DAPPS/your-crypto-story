@@ -4,7 +4,6 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import type { UserConfig } from 'vite';
 import { defineConfig, loadEnv } from 'vite';
-import { purgeCss } from 'vite-plugin-tailwind-purgecss';
 
 // npm run dev = local
 // npm run build = local
@@ -42,9 +41,9 @@ const readCanisterIds = ({ prefix }: { prefix?: string }): Record<string, string
 };
 
 const config: UserConfig = {
-	plugins: [sveltekit(), purgeCss()],
+	plugins: [sveltekit()],
 	build: {
-		target: 'esnext',
+		target: 'es2020',
 		rollupOptions: {
 			// Polyfill Buffer for production build
 			plugins: [
@@ -52,11 +51,6 @@ const config: UserConfig = {
 					modules: { Buffer: ['buffer', 'Buffer'] }
 				})
 			]
-		}
-	},
-	server: {
-		proxy: {
-			'/api': 'http://localhost:8080'
 		}
 	},
 	optimizeDeps: {
