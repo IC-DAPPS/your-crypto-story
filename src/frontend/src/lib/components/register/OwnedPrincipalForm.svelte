@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
-	import { Button } from '$lib/components/ui/button/index.js';
+	import { Input } from '@components/ui/input/index.js';
+	import { Label } from '@components/ui/label/index.js';
+	import { Button } from '@components/ui/button/index.js';
 	import { Principal } from '@dfinity/principal';
 	import { fly, fade, slide, type TransitionConfig } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
-	import type { PrincipalName, Result_2 } from '../../../../declarations/backend/backend.did';
-	import { alerterStore } from '$lib/stores/alerter.store';
-	import Alerter from '$lib/components/Alerter.svelte';
-	import { authStore } from '$lib/stores/auth.store';
+	import type { PrincipalName, Result_2 } from '@declarations/backend/backend.did';
+	import { alerterStore } from '@stores/alerter.store';
+	import Alerter from '@components/Alerter.svelte';
+	import { authStore } from '@stores/auth.store';
 	import { CircleX } from 'lucide-svelte';
-	import ButtonWithSpinner from './ButtonWithSpinner.svelte';
+	import ButtonWithSpinner from '../ButtonWithSpinner.svelte';
 
 	type InputValue = {
 		name: string;
@@ -130,9 +130,8 @@
 			}
 		}
 		try {
-			const result = await $authStore.actor.insert_owned_principals(ownedPrincipals);
-
-			handleResult(result);
+			// const result = await $authStore.actor.insert_owned_principals(ownedPrincipals);
+			// handleResult(result);
 		} catch (error) {
 			alerterStore.show({
 				level: 'error',

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import Avatar from '@/components/Avatar.svelte';
-	import ButtonWithSpinner from '@/components/ButtonWithSpinner.svelte';
-	import { authStore } from '@/stores/auth.store';
+	import Avatar from '@components/Avatar.svelte';
+	import ButtonWithSpinner from '@components/ButtonWithSpinner.svelte';
+	import { authStore } from '@stores/auth.store';
 	import { page } from '$app/stores';
-	import LightAndDarkToggle from '@/components/LightAndDarkToggle.svelte';
+	import LightAndDarkToggle from '@components/LightAndDarkToggle.svelte';
 
 	const Pages = [
 		{ name: 'Home', link: '/' },
@@ -32,12 +32,15 @@
 				{/each}
 			</ul>
 
-			{#if $authStore.isAuthenticated}
+			{#if $authStore.identity}
 				<Avatar />
 			{:else}
 				<div class="flex items-center gap-4">
 					<LightAndDarkToggle />
-					<ButtonWithSpinner onClick={authStore.signIn}>Login</ButtonWithSpinner>
+					<ButtonWithSpinner
+						onClick={async () => authStore.signIn({ domain: 'internetcomputer.org' })}
+						>Login</ButtonWithSpinner
+					>
 				</div>
 			{/if}
 		</div>

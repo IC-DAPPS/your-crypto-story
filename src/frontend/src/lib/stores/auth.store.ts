@@ -1,91 +1,90 @@
-import { type Identity, type ActorSubclass, AnonymousIdentity } from '@dfinity/agent';
-import type { _SERVICE } from '../../../../declarations/backend/backend.did';
+import type { AuthClient } from '@dfinity/auth-client';
+import type { OptionIdentity } from '$lib/types/identity';
+import type { Option } from '$lib/types/utils';
+import { createAuthClient } from '@utils/auth.utils';
 import { writable, type Readable } from 'svelte/store';
-import { AuthClient } from '@dfinity/auth-client';
-import { getActor } from '../actor';
-import { userSyncAndNavigation } from './user.store';
+import {
+	Network,
+	INTERNET_IDENTITY_CANISTER_ID,
+	AUTH_MAX_TIME_TO_LIVE,
+	AUTH_POPUP_WIDTH,
+	AUTH_POPUP_HEIGHT
+} from '@constants/app.constants';
+import { popupCenter } from '@utils/window.utils';
 
 export interface AuthStoreData {
-	isAuthenticated: boolean;
-	identity: Identity;
-	actor: ActorSubclass<_SERVICE>;
+	identity: OptionIdentity;
+}
+
+let authClient: Option<AuthClient>;
+
+export interface AuthSignInParams {
+	domain?: 'ic0.app' | 'internetcomputer.org';
 }
 
 export interface AuthStore extends Readable<AuthStoreData> {
 	sync: () => Promise<void>;
-	signIn: () => Promise<void>;
+	signIn: (params: AuthSignInParams) => Promise<void>;
 	signOut: () => Promise<void>;
 }
 
-let authClient: AuthClient | null | undefined;
-
-const anonIdentity = new AnonymousIdentity();
-const anonActor: ActorSubclass<_SERVICE> = await getActor(anonIdentity);
-
-const init = (): AuthStore => {
-	const { subscribe, set } = writable<AuthStoreData>({
-		isAuthenticated: false,
-		identity: new AnonymousIdentity(),
-		actor: anonActor
+const initAuthStore = (): AuthStore => {
+	const { set, subscribe, update } = writable<AuthStoreData>({
+		identity: undefined
 	});
-
-	const sync = async () => {
-		authClient = authClient ?? (await AuthClient.create());
-		const isAuthenticated: boolean = await authClient.isAuthenticated();
-
-		if (isAuthenticated) {
-			const signIdentity = authClient.getIdentity();
-			const authActor = await getActor(signIdentity);
-
-			return set({
-				isAuthenticated,
-				identity: signIdentity,
-				actor: authActor
-			});
-		}
-		return set({ isAuthenticated, identity: anonIdentity, actor: anonActor });
-	};
 
 	return {
 		subscribe,
-		sync,
-		signIn: async () =>
-			new Promise<void>((resolve, reject) => {
-				(async () => {
-					authClient = authClient ?? (await AuthClient.create());
+		sync: async () => {
+			authClient = authClient ?? (await createAuthClient());
 
-					const identityProvider =
-						import.meta.env.VITE_DFX_NETWORK === 'local'
-							? 'http://rdmx6-jaaaa-aaaaa-aaadq-cai.localhost:8080'
-							: 'https://identity.internetcomputer.org/';
+			const isAuthenticated = await authClient.isAuthenticated();
 
-					authClient.login({
-						identityProvider,
-						maxTimeToLive: BigInt(7) * BigInt(24) * BigInt(3_600_000_000_000), // 1 week
-						onSuccess: async () => {
-							try {
-								await sync();
-								await userSyncAndNavigation();
-								resolve();
-							} catch (error) {
-								reject(error);
-							}
-						},
-						onError: reject
-					});
-				})().catch(reject);
+			set({ identity: isAuthenticated ? authClient.getIdentity() : null });
+		},
+
+		signIn: ({ domain }: AuthSignInParams) =>
+			new Promise(async (resolve, reject) => {
+				authClient = authClient ?? (await createAuthClient());
+
+				const identityProvider =
+					Network === 'local'
+						? /apple/i.test(navigator?.vendor)
+							? `http://localhost:8080?canisterId=${INTERNET_IDENTITY_CANISTER_ID}`
+							: `http://${INTERNET_IDENTITY_CANISTER_ID}.localhost:8080`
+						: `https://identity.${domain ?? 'ic0.app'}`;
+
+				await authClient.login({
+					maxTimeToLive: AUTH_MAX_TIME_TO_LIVE,
+					onSuccess: () => {
+						update((state: AuthStoreData) => ({
+							...state,
+							identity: authClient?.getIdentity()
+						}));
+
+						resolve();
+					},
+					onError: reject,
+					identityProvider,
+					windowOpenerFeatures: popupCenter({
+						width: AUTH_POPUP_WIDTH,
+						height: AUTH_POPUP_HEIGHT
+					})
+				});
 			}),
-
 		signOut: async () => {
-			const client = authClient ?? (await AuthClient.create());
-			client.logout();
+			const client: AuthClient = authClient ?? (await createAuthClient());
+			await client.logout();
 
 			// This fix a "sign in -> sign out -> sign in again" flow without window reload.
 			authClient = null;
 
-			set({ isAuthenticated: false, identity: anonIdentity, actor: anonActor });
+			update((state: AuthStoreData) => ({
+				...state,
+				identity: null
+			}));
 		}
 	};
 };
 
-export const authStore: AuthStore = init();
+export const authStore = initAuthStore();

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { authStore } from '$lib/stores/auth.store';
-	import { alerterStore } from '$lib/stores/alerter.store';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
-	import ButtonWithSpinner from './ButtonWithSpinner.svelte';
+	import { authStore } from '@stores/auth.store';
+	import { alerterStore } from '@stores/alerter.store';
+	import { Input } from '@components/ui/input/index.js';
+	import { Label } from '@components/ui/label/index.js';
+	import ButtonWithSpinner from '../ButtonWithSpinner.svelte';
 
 	let name = '';
 	let email = '';
@@ -30,15 +30,14 @@
 		if (buttonDisable || name.length < 2) return;
 
 		try {
-			let result = await $authStore.actor.insert_userdata(name, email.length > 0 ? [email] : []);
-
-			if ('Err' in result) {
-				if ('AnonymousCaller' in result.Err) {
-					alerterStore.show({ level: 'error', message: 'Anonymous user, please Log in.' });
-				}
-			} else {
-				complete = true;
-			}
+			// let result = await $authStore.actor.insert_userdata(name, email.length > 0 ? [email] : []);
+			// if ('Err' in result) {
+			// 	if ('AnonymousCaller' in result.Err) {
+			// 		alerterStore.show({ level: 'error', message: 'Anonymous user, please Log in.' });
+			// 	}
+			// } else {
+			// 	complete = true;
+			// }
 		} catch (error) {
 			alerterStore.show({ level: 'error', message: 'Backend communication issues.' });
 			console.error(error);

@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import { authStore } from '../stores/auth.store';
 	import Button from './ui/button/button.svelte';
 
@@ -13,4 +13,4 @@
 	<Button variant="secondary" on:click={() => authStore.signOut()} class="secondary">LOGOUT</Button>
 {:else}
 	<Button on:click={() => login()}>LOGIN</Button>
-{/if}
+{/if} -->

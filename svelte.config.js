@@ -1,9 +1,8 @@
 import adapter from '@sveltejs/adapter-static';
 import autoprefixer from 'autoprefixer';
 import { readFileSync } from 'fs';
-import preprocess from 'svelte-preprocess';
+import { sveltePreprocess } from 'svelte-preprocess';
 import { fileURLToPath } from 'url';
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 const file = fileURLToPath(new URL('package.json', import.meta.url));
 const json = readFileSync(file, 'utf8');
@@ -13,7 +12,13 @@ const filesPath = (path) => `src/frontend/${path}`;
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	preprocess: vitePreprocess(),
+	// Consult https://github.com/sveltejs/svelte-preprocess
+	// for more information about preprocessors
+	preprocess: sveltePreprocess({
+		postcss: {
+			plugins: [autoprefixer]
+		}
+	}),
 	kit: {
 		adapter: adapter({
 			fallback: 'index.html',
@@ -33,7 +38,12 @@ const config = {
 			errorTemplate: filesPath('src/error.html')
 		},
 		alias: {
-			'@/*': './src/frontend/src/lib/*'
+			'@components/*': './src/frontend/src/lib/components/*',
+			'@constants/*': './src/frontend/src/lib/constants/*',
+			'@declarations/*': './src/declarations/*',
+			'@services/*': './src/frontend/src/lib/services/*',
+			'@stores/*': './src/frontend/src/lib/stores/*',
+			'@utils/*': './src/frontend/src/lib/utils/*'
 		}
 	},
 	serviceWorker: {

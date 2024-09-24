@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
-	import { Button } from '$lib/components/ui/button/index.js';
+	import { Input } from '@components/ui/input/index.js';
+	import { Label } from '@components/ui/label/index.js';
+	import { Button } from '@components/ui/button/index.js';
 	import { createEventDispatcher } from 'svelte';
 	import { fly, fade, slide, type TransitionConfig } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
-	import { alerterStore } from '$lib/stores/alerter.store';
-	import { authStore } from '$lib/stores/auth.store';
-	import type { PrincipalName, Result_2 } from '../../../../declarations/backend/backend.did';
+	import { alerterStore } from '@stores/alerter.store';
+	import { authStore } from '@stores/auth.store';
+	import type { PrincipalName, Result_2 } from '@declarations/backend/backend.did';
 	import { Principal } from '@dfinity/principal';
 	import { CircleX } from 'lucide-svelte';
-	import ButtonWithSpinner from './ButtonWithSpinner.svelte';
+	import ButtonWithSpinner from '../ButtonWithSpinner.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -125,10 +125,10 @@
 		}
 		if (knownPrincipals.length > 0) {
 			try {
-				spinnerOn = true;
-				const result = await $authStore.actor.insert_known_principals(knownPrincipals);
-				spinnerOn = false;
-				handleResult(result);
+				// spinnerOn = true;
+				// const result = await $authStore.actor.insert_known_principals(knownPrincipals);
+				// spinnerOn = false;
+				// handleResult(result);
 			} catch (error) {
 				alerterStore.show({
 					level: 'error',
