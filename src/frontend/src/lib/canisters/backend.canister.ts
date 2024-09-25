@@ -1,14 +1,14 @@
 import { getAgent } from '$lib/actors/agents.ic';
 import type { InsertUserDataParams, UpdatePrincipalNameParams } from '$lib/types/api';
 import type { CreateCanisterOptions } from '$lib/types/canister';
+import { idlFactory as idlFactoryBackend } from '@declarations/backend';
 import {
-	idlFactory as idlFactoryBackend,
 	type PrincipalName,
 	type _SERVICE as BackendService,
 	type Result,
 	type Result_1,
 	type Result_2
-} from '@declarations/backend/backend.did';
+} from '@declarations/backend/backend.did.d';
 import { Canister, createServices, type QueryParams } from '@dfinity/utils';
 
 export class BackendCanister extends Canister<BackendService> {
@@ -42,16 +42,16 @@ export class BackendCanister extends Canister<BackendService> {
 		return get_userdata();
 	};
 
-	insertKnownPrincipals = async (principalAndName: Array<PrincipalName>): Promise<Result_2> => {
+	insertKnownPrincipals = async (principalsAndNames: Array<PrincipalName>): Promise<Result_2> => {
 		const { insert_known_principals } = this.caller({ certified: true });
 
-		return insert_known_principals(principalAndName);
+		return insert_known_principals(principalsAndNames);
 	};
 
-	insertOwnedPrincipals = async (principalAndName: Array<PrincipalName>): Promise<Result_2> => {
+	insertOwnedPrincipals = async (principalsAndNames: Array<PrincipalName>): Promise<Result_2> => {
 		const { insert_owned_principals } = this.caller({ certified: true });
 
-		return insert_owned_principals(principalAndName);
+		return insert_owned_principals(principalsAndNames);
 	};
 
 	insertUserdata = async ({ name, email }: InsertUserDataParams): Promise<Result_2> => {

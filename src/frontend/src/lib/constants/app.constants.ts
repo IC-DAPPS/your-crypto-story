@@ -1,6 +1,8 @@
 export const INTERNET_IDENTITY_CANISTER_ID =
 	(import.meta.env.VITE_CANISTER_ID_INTERNET_IDENTITY as string) ?? 'rdmx6-jaaaa-aaaaa-aaadq-cai';
 
+export const BACKEND_CANISTER_ID = import.meta.env.VITE_BACKEND_CANISTER_ID as string;
+
 export const Network = import.meta.env.VITE_DFX_NETWORK as 'local' | 'ic';
 
 export const HOST = import.meta.env.VITE_HOST as string;
