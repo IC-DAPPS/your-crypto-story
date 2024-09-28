@@ -4,6 +4,8 @@
 	import { authStore } from '@stores/auth.store';
 	import { page } from '$app/stores';
 	import LightAndDarkToggle from '@components/LightAndDarkToggle.svelte';
+	import { signIn, signOut } from '@services/auth.service';
+	import Button from './ui/button/button.svelte';
 
 	const Pages = [
 		{ name: 'Home', link: '/' },
@@ -37,9 +39,9 @@
 			{:else}
 				<div class="flex items-center gap-4">
 					<LightAndDarkToggle />
-					<ButtonWithSpinner
-						onClick={async () => authStore.signIn({ domain: 'internetcomputer.org' })}
-						>Login</ButtonWithSpinner
+					<ButtonWithSpinner class='w-[68.1px]'
+						onClick={async () => await signIn({})}
+						>Log in</ButtonWithSpinner
 					>
 				</div>
 			{/if}
