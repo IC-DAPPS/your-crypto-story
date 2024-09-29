@@ -1,0 +1,21 @@
+{
+	"auth": {
+		"notify": {
+			"loading": "Authenticating...",
+			"success": "Authentication successful",
+			"canceled": "Authentication canceled",
+			"error": "Something went wrong while sign-in.",
+			"sign_out": "Logged out"
+		},
+		"text": {
+			"authenticate": "Login",
+			"logout": "Logout"
+		}
+	},
+	"navigation": {
+		"home": "Home",
+		"transactions": "Transactions",
+		"portfolio": "Portfolio",
+		"story": "Story"
+	}
+}

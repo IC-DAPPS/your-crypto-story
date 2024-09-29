@@ -4,14 +4,14 @@
 	import { authStore } from '@stores/auth.store';
 	import { page } from '$app/stores';
 	import LightAndDarkToggle from '@components/LightAndDarkToggle.svelte';
-	import { signIn, signOut } from '@services/auth.service';
-	import Button from './ui/button/button.svelte';
+	import { signIn } from '@services/auth.service';
+	import { i18n } from '@stores/i18n.store';
 
 	const Pages = [
-		{ name: 'Home', link: '/' },
-		{ name: 'Transactions', link: '/transactions/' },
-		{ name: 'Portfolio', link: '/portfolio/' },
-		{ name: 'Story', link: '/story/' }
+		{ name: $i18n.navigation.home, link: '/' },
+		{ name: $i18n.navigation.transactions, link: '/transactions/' },
+		{ name: $i18n.navigation.portfolio, link: '/portfolio/' },
+		{ name: $i18n.navigation.story, link: '/story/' }
 	];
 </script>
 
@@ -39,9 +39,8 @@
 			{:else}
 				<div class="flex items-center gap-4">
 					<LightAndDarkToggle />
-					<ButtonWithSpinner class='w-[68.1px]'
-						onClick={async () => await signIn({})}
-						>Log in</ButtonWithSpinner
+					<ButtonWithSpinner class="w-[68.1px]" onClick={async () => await signIn({})}
+						>{$i18n.auth.text.authenticate}</ButtonWithSpinner
 					>
 				</div>
 			{/if}

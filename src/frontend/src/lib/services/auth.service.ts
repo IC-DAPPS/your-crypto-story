@@ -1,22 +1,24 @@
 import { authStore, type AuthSignInParams } from '@stores/auth.store';
+import { i18n } from '@stores/i18n.store';
 import { toast } from 'svelte-sonner';
+import { get } from 'svelte/store';
 
 export const signIn = async (params: AuthSignInParams) => {
-	let toastId = toast.loading('Authenticating...');
+	let toastId = toast.loading(get(i18n).auth.notify.loading);
 	try {
 		await authStore.signIn(params);
 
-		toast.success('Authentication successful', {
+		toast.success(get(i18n).auth.notify.success, {
 			id: toastId
 		});
 	} catch (err: unknown) {
 		if (err === 'UserInterrupt') {
-			toast.error('Authentication canceled', {
+			toast.error(get(i18n).auth.notify.canceled, {
 				id: toastId
 			});
 		}
 		console.error(err);
-		toast.error('Authentication failed', {
+		toast.error(get(i18n).auth.notify.error, {
 			id: toastId
 		});
 	}
@@ -24,5 +26,5 @@ export const signIn = async (params: AuthSignInParams) => {
 
 export const signOut = async () => {
 	await authStore.signOut();
-	toast.success('Logged out');
+	toast.success(get(i18n).auth.notify.sign_out);
 };
