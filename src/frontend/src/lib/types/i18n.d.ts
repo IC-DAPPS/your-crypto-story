@@ -21,8 +21,17 @@ interface I18nNavigation {
 	story: string;
 }
 
+interface I18nUserdata {
+	error: {
+		fetch: string;
+		no_userdata_found: string;
+		anonymous_user: string;
+	};
+}
+
 interface I18n {
 	lang: Languages;
 	auth: I18nAuth;
 	navigation: I18nNavigation;
+	userdata: I18nUserdata;
 }
