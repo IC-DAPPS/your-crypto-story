@@ -18,3 +18,9 @@ export interface CreateCanisterOptions<T> extends Omit<CanisterOptions<T>, 'cani
 	canisterId: Principal;
 	identity: Identity;
 }
+
+export type IndexCanisterApiFunctionParams<T = unknown> = T & {
+	identity?: OptionIdentity;
+	canisterId: CanisterIdText;
+	nullishIdentityErrorMessage?: string;
+};
