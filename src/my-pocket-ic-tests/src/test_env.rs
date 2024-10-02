@@ -3,7 +3,7 @@ use candid::Principal;
 use ic_agent::Identity;
 use pocket_ic::PocketIc;
 use std::env;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 // Constants for file paths and configurations
 const TEST_IDENTITY_PEM: &str = "pocket_identity.pem";
@@ -46,7 +46,7 @@ fn init(config: Config) -> TestEnv {
     pic.add_cycles(canister_id, config.cycles);
 
     // Install the canister with provided configuration
-    let install_args = config.install_args.unwrap_or(vec![]);
+    let install_args = config.install_args.unwrap_or_default();
     pic.install_canister(
         canister_id,
         config.wasm_bytes,
@@ -100,3 +100,6 @@ fn find_distributed_dir() -> Option<PathBuf> {
         }
     }
 }
+
+// Note: This code should work on both macOS and Linux as it uses cross-platform
+// Rust standard library functions. No specific changes are needed for compatibility.

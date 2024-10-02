@@ -59,7 +59,7 @@ fn insert_owned_principals(
     match storage::get_mut(caller) {
         Some(mut user_data) => {
             if owned_principals_arg.len() == 0 {
-                return Ok(());
+                 Ok(())
             } else {
                 for principal_name in owned_principals_arg {
                     user_data.owned_principals.push(principal_name);
