@@ -43,7 +43,8 @@ const config = {
 			'@declarations/*': './src/declarations/*',
 			'@services/*': './src/frontend/src/lib/services/*',
 			'@stores/*': './src/frontend/src/lib/stores/*',
-			'@utils/*': './src/frontend/src/lib/utils/*'
+			'@utils/*': './src/frontend/src/lib/utils/*',
+			'@env/*': './src/frontend/src/env'
 		}
 	},
 	serviceWorker: {

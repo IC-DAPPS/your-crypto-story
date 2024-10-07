@@ -66,6 +66,8 @@ const icrcIndexNgCanister = async ({
 			identity,
 			canisterId: Principal.fromText(canisterId)
 		});
+
+		currentIdentity = identity;
 	}
 
 	return indexCanister;

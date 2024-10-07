@@ -5,14 +5,14 @@
 	import Alerter from '$lib/components/Alerter.svelte';
 	import { fly } from 'svelte/transition';
 	import { goto } from '$app/navigation';
-	import { userSync } from '$lib/stores/user.store';
+	import { userStore } from '@stores/user.store';
 
 	let nameEmailFormComplete = false;
 	let ownedPrincipalFormComplete = false;
 	let knownPrincipalFormComplete = false;
 
 	async function handleKnownPrincipalFormComplete() {
-		await userSync();
+		await userStore.sync();
 		goto('/');
 	}
 </script>
