@@ -2,10 +2,10 @@
 	"auth": {
 		"notify": {
 			"loading": "Authenticating...",
-			"success": "Authentication successful",
-			"canceled": "Authentication canceled",
+			"success": "Authentication successful.",
+			"canceled": "Authentication canceled.",
 			"error": "Something went wrong while sign-in.",
-			"sign_out": "Logged out"
+			"sign_out": "Logged out."
 		},
 		"text": {
 			"authenticate": "Login",
@@ -17,5 +17,12 @@
 		"transactions": "Transactions",
 		"portfolio": "Portfolio",
 		"story": "Story"
+	},
+	"userdata": {
+		"error": {
+			"fetch": "Failed to fetch user data.",
+			"no_userdata_found": "Please register.",
+			"anonymous_user": "Please Log in."
+		}
 	}
 }
