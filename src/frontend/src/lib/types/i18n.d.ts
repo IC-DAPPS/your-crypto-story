@@ -22,10 +22,25 @@ interface I18nNavigation {
 }
 
 interface I18nUserdata {
+	text: {
+		profile_setup_title: string;
+		continue: string;
+		name: string;
+		email: string;
+	};
+	assertion: {
+		name_required: string;
+		email_invalid: string;
+	};
+	placeholder: {
+		name: string;
+		email: string;
+	};
 	error: {
 		fetch: string;
 		no_userdata_found: string;
 		anonymous_user: string;
+		error: string;
 	};
 }
 

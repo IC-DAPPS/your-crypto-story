@@ -6,6 +6,7 @@
 	import { fly } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import { userStore } from '@stores/user.store';
+	import { i18n } from '@stores/i18n.store';
 
 	let nameEmailFormComplete = false;
 	let ownedPrincipalFormComplete = false;
@@ -24,7 +25,7 @@
 		in:fly={{ y: '-100vh', duration: 500 }}
 		out:fly={{ y: '-40', duration: 500 }}
 	>
-		Welcome! Let's set this up.
+		{$i18n.userdata.text.profile_setup_title}
 	</h2>
 	{#if !nameEmailFormComplete}
 		<div in:fly={{ x: '-100%', duration: 500 }} out:fly={{ x: '100%', duration: 400 }}>

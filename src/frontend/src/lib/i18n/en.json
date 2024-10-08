@@ -19,10 +19,25 @@
 		"story": "Story"
 	},
 	"userdata": {
+		"text": {
+			"profile_setup_title": "Welcome! Let's set this up.",
+			"continue": "Continue",
+			"name": "Your Name",
+			"email": "Your Email"
+		},
+		"assertion": {
+			"name_required": "Required field. Minimum two characters.",
+			"email_invalid": "Input valid email."
+		},
+		"placeholder": {
+			"name": "Name",
+			"email": "Email"
+		},
 		"error": {
 			"fetch": "Failed to fetch user data.",
-			"no_userdata_found": "Please register.",
-			"anonymous_user": "Please Log in."
+			"no_userdata_found": "Set up your profile.",
+			"anonymous_user": "Please Log in.",
+			"error": "Something went wrong while setting up your profile."
 		}
 	}
 }
