@@ -9,7 +9,7 @@
 	import { addingOwnedPrincipals } from '@services/user.service';
 	import { smoothFly } from '@utils/transition.utils';
 	import type { PrincipalNameInput } from '$lib/types/principal-name';
-	import { inputsToOwnedPrincipals } from '@utils/principal-name.utils';
+	import { inputsToPrincipalsAndNames } from '@utils/principal-name.utils';
 	import {
 		handleInputs,
 		shouldShowPrincipalAliasError,
@@ -33,11 +33,11 @@
 	let buttonDisabled = true;
 	export let complete = false;
 
-	async function AddOwnedPrincipals() {
+	async function addOwnedPrincipals() {
 		buttonDisabled = handleInputs('principal', groupOfValue[0], groupOfValue);
 		buttonDisabled = handleInputs('name', groupOfValue[0], groupOfValue);
 
-		let ownedPrincipals: PrincipalName[] = inputsToOwnedPrincipals(groupOfValue);
+		let ownedPrincipals: PrincipalName[] = inputsToPrincipalsAndNames(groupOfValue);
 
 		const { success } = await addingOwnedPrincipals(ownedPrincipals);
 		complete = success;
@@ -65,7 +65,7 @@
 >
 	<div class="w-full max-w-xl">
 		<p class="mb-2 text-start text-sm font-medium max-sm:px-3">
-			Add your Principals from platforms like ICPSwap, NNS, OpenChat, and more...
+			{$i18n.userdata.text.add_owned_principal_description}
 		</p>
 	</div>
 	<hr />
@@ -74,7 +74,7 @@
 			{$i18n.userdata.text.add_new_form}
 		</Button>
 
-		<ButtonWithSpinner class="w-24" disabled={buttonDisabled} onClick={AddOwnedPrincipals}>
+		<ButtonWithSpinner class="w-24" disabled={buttonDisabled} onClick={addOwnedPrincipals}>
 			{$i18n.userdata.text.submit}
 		</ButtonWithSpinner>
 	</div>

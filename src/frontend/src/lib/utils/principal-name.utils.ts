@@ -35,7 +35,7 @@ export const getPrincipalNameMap = (): PrincipalNameMap => {
 	return createPrincipalNameMap(get(userStore).userData);
 };
 
-export const inputsToOwnedPrincipals = (inputs: PrincipalNameInput[]): PrincipalName[] => {
+export const inputsToPrincipalsAndNames = (inputs: PrincipalNameInput[]): PrincipalName[] => {
 	return inputs.reduce<PrincipalName[]>((accumulator, { principal, name }) => {
 		try {
 			accumulator.push({

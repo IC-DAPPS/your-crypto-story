@@ -29,8 +29,11 @@ interface I18nUserdata {
 		email: string;
 		add_new_form: string;
 		submit: string;
+		skip: string;
 		principal: string;
 		principal_alias: string;
+		add_owned_principal_description: string;
+		add_known_principal_description: string;
 	};
 	assertion: {
 		name_required: string;

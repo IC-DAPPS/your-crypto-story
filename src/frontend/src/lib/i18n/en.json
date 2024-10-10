@@ -26,8 +26,11 @@
 			"email": "Your Email",
 			"add_new_form": "Add new",
 			"submit": "Submit",
+			"skip": "Skip",
 			"principal": "Your Principal",
-			"principal_alias": "Account Name | Platform Name"
+			"principal_alias": "Account Name | Platform Name",
+			"add_owned_principal_description": "Add your Principals from platforms like ICPSwap, NNS, OpenChat, and more...",
+			"add_known_principal_description": "Add known Principals such as friends, family, organizations, or platforms."
 		},
 		"assertion": {
 			"name_required": "Required field. Minimum two characters.",
