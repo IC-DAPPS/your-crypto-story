@@ -2,24 +2,26 @@
 	import { Input } from '@components/ui/input/index.js';
 	import { Label } from '@components/ui/label/index.js';
 	import { Button } from '@components/ui/button/index.js';
-	import { Principal } from '@dfinity/principal';
-	import { fly, fade, slide, type TransitionConfig } from 'svelte/transition';
-	import { cubicOut } from 'svelte/easing';
-	import type { PrincipalName, Result_2 } from '@declarations/backend/backend.did';
-	import { alerterStore } from '@stores/alerter.store';
-	import Alerter from '@components/Alerter.svelte';
-	import { authStore } from '@stores/auth.store';
+	import { fly, fade, slide } from 'svelte/transition';
+	import type { PrincipalName } from '@declarations/backend/backend.did';
 	import { CircleX } from 'lucide-svelte';
 	import ButtonWithSpinner from '../ButtonWithSpinner.svelte';
+	import { addingOwnedPrincipals } from '@services/user.service';
+	import { smoothFly } from '@utils/transition.utils';
+	import type { PrincipalNameInput } from '$lib/types/principal-name';
+	import { inputsToPrincipalsAndNames } from '@utils/principal-name.utils';
+	import {
+		handleInputs,
+		shouldShowPrincipalAliasError,
+		shouldShowPrincipalError,
+		getPrincipalAliasErrorMessage,
+		getPrincipalErrorMessage,
+		addNewPrincipalNameForm,
+		deleteValue
+	} from '@utils/principal-form.utils';
+	import { i18n } from '@stores/i18n.store';
 
-	type InputValue = {
-		name: string;
-		principal: string;
-		nameInputTouched: boolean;
-		principalInputTouched: boolean;
-	};
-
-	let groupOfValue: InputValue[] = [
+	let groupOfValue: PrincipalNameInput[] = [
 		{
 			name: '',
 			principal: '',
@@ -29,151 +31,33 @@
 	];
 
 	let buttonDisabled = true;
-
-	function validatePrincipal(textPrincipal: string): boolean {
-		try {
-			Principal.fromText(textPrincipal);
-			return true;
-		} catch (error) {
-			return false;
-		}
-	}
-
-	function validateName(name: string): boolean {
-		return name.trim().length >= 3 && name.length <= 60;
-	}
-
-	function isPrincipalUnique(principal: string, index: number): boolean {
-		return groupOfValue.every((value, i) => i === index || value.principal !== principal);
-	}
-
-	function handleInputs(value: InputValue, field: 'name' | 'principal') {
-		if (field === 'name') {
-			value.name = value.name.replace(/^\s+/, ''); // Remove leading whitespace
-			value.nameInputTouched = true;
-		} else {
-			value.principalInputTouched = true;
-		}
-		updateButtonState();
-	}
-
-	function updateButtonState() {
-		buttonDisabled = groupOfValue.some(
-			(value, index) =>
-				!validateName(value.name) ||
-				!validatePrincipal(value.principal) ||
-				!isPrincipalUnique(value.principal, index)
-		);
-	}
-
-	function addNewAccount() {
-		groupOfValue = [
-			...groupOfValue,
-			{
-				name: '',
-				principal: '',
-				nameInputTouched: false,
-				principalInputTouched: false
-			}
-		];
-		updateButtonState();
-	}
-
-	function shouldShowNameError(value: InputValue): boolean {
-		return value.nameInputTouched && !validateName(value.name);
-	}
-
-	function shouldShowPrincipalError(value: InputValue, index: number): boolean {
-		return (
-			value.principalInputTouched &&
-			(!validatePrincipal(value.principal) || !isPrincipalUnique(value.principal, index))
-		);
-	}
-
-	function getNameErrorMessage(name: string): string {
-		if (name.trim().length < 3) {
-			return 'Minimum three non-whitespace characters.';
-		} else if (name.length > 60) {
-			return 'Maximum 60 characters allowed.';
-		}
-		return '';
-	}
-
-	function getPrincipalErrorMessage(principal: string, index: number): string {
-		if (!validatePrincipal(principal)) {
-			return 'Input valid Principal.';
-		} else if (!isPrincipalUnique(principal, index)) {
-			return 'Principal must be unique.';
-		}
-		return '';
-	}
-
-	function deleteValue(index: number) {
-		groupOfValue = groupOfValue.filter((_, i) => i !== index);
-	}
-
-	async function insertOwnedPrincipal() {
-		handleInputs(groupOfValue[0], 'principal');
-		handleInputs(groupOfValue[0], 'name');
-		updateButtonState();
-		let ownedPrincipals: PrincipalName[] = [];
-		for (let value of groupOfValue) {
-			try {
-				let principal = Principal.fromText(value.principal);
-				ownedPrincipals.push({ principal, name: value.name });
-			} catch (error) {
-				alerterStore.show({
-					level: 'error',
-					message: 'Failed to convert ' + value.principal + ' into Principal'
-				});
-				return; // Exit the function if an error occurs
-			}
-		}
-		try {
-			// const result = await $authStore.actor.insert_owned_principals(ownedPrincipals);
-			// handleResult(result);
-		} catch (error) {
-			alerterStore.show({
-				level: 'error',
-				message: 'Failed to submit. Backend communication issues.'
-			});
-			console.error(error);
-		}
-	}
-
-	function handleResult(result: Result_2) {
-		if ('Ok' in result) {
-			complete = true;
-		} else {
-			if ('AnonymousCaller' in result.Err) {
-				alerterStore.show({ level: 'error', message: 'Anonymous user, please Log in.' });
-			} else if ('DidntFindUserData' in result.Err) {
-				alerterStore.show({ level: 'error', message: 'Failed! Please register or Log in.' });
-			}
-		}
-	}
-
 	export let complete = false;
 
-	function smoothFly(
-		node: Element,
-		{ delay = 0, duration = 400 }: { delay?: number; duration?: number }
-	): TransitionConfig {
-		return {
-			delay,
-			duration,
-			css: (t: number) => {
-				const eased = cubicOut(t);
-				return `
-          opacity: ${eased};
-          transform: translateY(${(1 - eased) * 20}px)
-        `;
-			}
-		};
+	async function addOwnedPrincipals() {
+		buttonDisabled = handleInputs('principal', groupOfValue[0], groupOfValue);
+		buttonDisabled = handleInputs('name', groupOfValue[0], groupOfValue);
+
+		let ownedPrincipals: PrincipalName[] = inputsToPrincipalsAndNames(groupOfValue);
+
+		const { success } = await addingOwnedPrincipals(ownedPrincipals);
+		complete = success;
+
+		if (success) groupOfValue = [];
+	}
+
+	function handleAddNewForm() {
+		const { newGroupOfInputs, newButtonState } = addNewPrincipalNameForm(groupOfValue);
+		groupOfValue = newGroupOfInputs;
+		buttonDisabled = newButtonState;
+	}
+
+	function handleDeleteValue(index: number) {
+		const { newGroupOfInputs, newButtonState } = deleteValue(index, groupOfValue);
+		groupOfValue = newGroupOfInputs;
+		buttonDisabled = newButtonState;
 	}
 </script>
 
-<Alerter />
 <div
 	class="mt-2 flex flex-col items-center"
 	in:fly={{ x: '-100%', duration: 500, delay: 380 }}
@@ -181,15 +65,17 @@
 >
 	<div class="w-full max-w-xl">
 		<p class="mb-2 text-start text-sm font-medium max-sm:px-3">
-			Add your Principals from platforms like ICPSwap, NNS, OpenChat, and more...
+			{$i18n.userdata.text.add_owned_principal_description}
 		</p>
 	</div>
 	<hr />
 	<div class="flex w-full max-w-xl justify-between max-sm:px-3">
-		<Button variant="outline" on:click={addNewAccount}>Add new</Button>
+		<Button variant="outline" on:click={handleAddNewForm}>
+			{$i18n.userdata.text.add_new_form}
+		</Button>
 
-		<ButtonWithSpinner class="w-24" disabled={buttonDisabled} onClick={insertOwnedPrincipal}>
-			Submit
+		<ButtonWithSpinner class="w-24" disabled={buttonDisabled} onClick={addOwnedPrincipals}>
+			{$i18n.userdata.text.submit}
 		</ButtonWithSpinner>
 	</div>
 
@@ -197,44 +83,49 @@
 		<div
 			id="value-div"
 			class="m-6 w-full max-w-xl rounded border p-3"
-			in:smoothFly={{ delay: index * 100, duration: 400 }}
+			in:smoothFly={{ delay: index * 100, duration: 300, y: 30 }}
 			out:fade={{ duration: 300 }}
 		>
 			<div class="mb-2 flex justify-between">
 				<Label for="principal-input-{index}" class="block">
-					Your Principal <span class="text-red-500">*</span>
+					{$i18n.userdata.text.principal} <span class="text-red-500">*</span>
 				</Label>
 				{#if groupOfValue.length > 1}
-					<button on:click={() => deleteValue(index)}><CircleX /></button>
+					<button
+						on:click={() => handleDeleteValue(index)}
+						transition:slide|local={{ duration: 200 }}
+					>
+						<CircleX />
+					</button>
 				{/if}
 			</div>
 			<Input
 				type="text"
 				id="principal-input-{index}"
-				placeholder="Principal"
+				placeholder={$i18n.userdata.placeholder.principal}
 				bind:value={value.principal}
-				on:input={() => handleInputs(value, 'principal')}
-				on:blur={() => handleInputs(value, 'principal')}
+				on:input={() => (buttonDisabled = handleInputs('principal', value, groupOfValue))}
+				on:blur={() => (buttonDisabled = handleInputs('principal', value, groupOfValue))}
 			/>
-			{#if shouldShowPrincipalError(value, index)}
+			{#if shouldShowPrincipalError(value, index, groupOfValue)}
 				<p class="mt-2 text-sm text-muted-foreground" transition:slide|local={{ duration: 200 }}>
-					{getPrincipalErrorMessage(value.principal, index)}
+					{getPrincipalErrorMessage(value.principal, index, groupOfValue)}
 				</p>
 			{/if}
 			<Label for="name-input-{index}" class="mb-2 mt-3 block">
-				Account Name | Platform Name <span class="text-red-500">*</span>
+				{$i18n.userdata.text.principal_alias} <span class="text-red-500">*</span>
 			</Label>
 			<Input
 				type="text"
 				id="name-input-{index}"
-				placeholder="Name"
+				placeholder={$i18n.userdata.placeholder.alias_name}
 				bind:value={value.name}
-				on:input={() => handleInputs(value, 'name')}
-				on:blur={() => handleInputs(value, 'name')}
+				on:input={() => (buttonDisabled = handleInputs('name', value, groupOfValue))}
+				on:blur={() => (buttonDisabled = handleInputs('name', value, groupOfValue))}
 			/>
-			{#if shouldShowNameError(value)}
+			{#if shouldShowPrincipalAliasError(value)}
 				<p class="mt-2 text-sm text-muted-foreground" transition:slide|local={{ duration: 200 }}>
-					{getNameErrorMessage(value.name)}
+					{getPrincipalAliasErrorMessage(value.name)}
 				</p>
 			{/if}
 		</div>

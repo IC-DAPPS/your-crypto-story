@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { authStore } from '@stores/auth.store';
-	import { alerterStore } from '@stores/alerter.store';
 	import { Input } from '@components/ui/input/index.js';
 	import { Label } from '@components/ui/label/index.js';
 	import ButtonWithSpinner from '../ButtonWithSpinner.svelte';
+	import { addNewUser } from '@services/user.service';
+	import { i18n } from '@stores/i18n.store';
+	import { validateEmail } from '@utils/email.utils';
 
 	let name = '';
 	let email = '';
@@ -12,15 +13,11 @@
 	let enableNameError = false;
 	let enableEmailError = false;
 
-	function validateEmail(email: string): boolean {
-		// Regular expression for basic email validation
-		const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		return re.test(email);
-	}
-
 	function handleInputs() {
 		enableNameError = name.length < 2;
+
 		enableEmailError = email.length > 0 && !validateEmail(email);
+
 		buttonDisable = enableNameError || enableEmailError;
 	}
 
@@ -29,38 +26,39 @@
 
 		if (buttonDisable || name.length < 2) return;
 
-		try {
-			// let result = await $authStore.actor.insert_userdata(name, email.length > 0 ? [email] : []);
-			// if ('Err' in result) {
-			// 	if ('AnonymousCaller' in result.Err) {
-			// 		alerterStore.show({ level: 'error', message: 'Anonymous user, please Log in.' });
-			// 	}
-			// } else {
-			// 	complete = true;
-			// }
-		} catch (error) {
-			alerterStore.show({ level: 'error', message: 'Backend communication issues.' });
-			console.error(error);
-		}
+		const { success } = await addNewUser({ name, email: email.length > 0 ? email : undefined });
+		complete = success;
 	}
 	export let complete = false;
 </script>
 
 <div class="flex flex-col items-center">
 	<div class="m-6 w-full max-w-md p-4">
-		<Label for="name" class="mb-2 block">Your Name <span>*</span></Label>
-		<Input id="name" type="text" placeholder="Name" bind:value={name} on:input={handleInputs} />
+		<Label for="name" class="mb-2 block">{$i18n.userdata.text.name}<span>*</span></Label>
+		<Input
+			id="name"
+			type="text"
+			placeholder={$i18n.userdata.placeholder.name}
+			bind:value={name}
+			on:input={handleInputs}
+		/>
 		{#if enableNameError}
-			<p class="mt-1 text-sm text-muted-foreground">Required field. Minimum two characters.</p>
+			<p class="mt-1 text-sm text-muted-foreground">{$i18n.userdata.assertion.name_required}</p>
 		{/if}
-		<Label for="email" class="mb-2 mt-4 block">Your Email</Label>
-		<Input id="email" type="email" placeholder="Email" bind:value={email} on:input={handleInputs} />
+		<Label for="email" class="mb-2 mt-4 block">{$i18n.userdata.text.email}</Label>
+		<Input
+			id="email"
+			type="email"
+			placeholder={$i18n.userdata.placeholder.email}
+			bind:value={email}
+			on:input={handleInputs}
+		/>
 		{#if enableEmailError}
-			<p class="mt-1 text-sm text-muted-foreground">Input valid email.</p>
+			<p class="mt-1 text-sm text-muted-foreground">{$i18n.userdata.assertion.email_invalid}</p>
 		{/if}
 
 		<ButtonWithSpinner class="mt-6 w-24" disabled={buttonDisable} onClick={addUser}>
-			Continue
+			{$i18n.userdata.text.continue}
 		</ButtonWithSpinner>
 	</div>
 </div>
