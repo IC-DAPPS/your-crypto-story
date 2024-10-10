@@ -1,7 +1,10 @@
-import type { PrincipalNameMap } from '$lib/types/principal-name';
-import type { UserData } from '@declarations/backend/backend.did';
+import type { PrincipalNameInput, PrincipalNameMap } from '$lib/types/principal-name';
+import type { PrincipalName, UserData } from '@declarations/backend/backend.did';
 import { userStore } from '@stores/user.store';
 import { get } from 'svelte/store';
+import { Principal } from '@dfinity/principal';
+import { toast } from 'svelte-sonner';
+import { i18n } from '@stores/i18n.store';
 
 function createPrincipalNameMap(userData: UserData): PrincipalNameMap {
 	const principalNameMap = new Map<string, string>();
@@ -30,4 +33,19 @@ function createPrincipalNameMap(userData: UserData): PrincipalNameMap {
 
 export const getPrincipalNameMap = (): PrincipalNameMap => {
 	return createPrincipalNameMap(get(userStore).userData);
+};
+
+export const inputsToOwnedPrincipals = (inputs: PrincipalNameInput[]): PrincipalName[] => {
+	return inputs.reduce<PrincipalName[]>((accumulator, { principal, name }) => {
+		try {
+			accumulator.push({
+				principal: Principal.fromText(principal),
+				name
+			});
+		} catch (error) {
+			console.error(error);
+			toast.error(principal + get(i18n).userdata.error.principal_conversion_error);
+		}
+		return accumulator;
+	}, []);
 };

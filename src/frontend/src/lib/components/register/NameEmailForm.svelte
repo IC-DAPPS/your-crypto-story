@@ -26,7 +26,7 @@
 
 		if (buttonDisable || name.length < 2) return;
 
-		let { success } = await addNewUser({ name, email: email.length > 0 ? email : undefined });
+		const { success } = await addNewUser({ name, email: email.length > 0 ? email : undefined });
 		complete = success;
 	}
 	export let complete = false;

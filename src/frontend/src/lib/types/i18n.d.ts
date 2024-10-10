@@ -27,20 +27,31 @@ interface I18nUserdata {
 		continue: string;
 		name: string;
 		email: string;
+		add_new_form: string;
+		submit: string;
+		principal: string;
+		principal_alias: string;
 	};
 	assertion: {
 		name_required: string;
 		email_invalid: string;
+		principal_alias_name_minimum: string;
+		principal_alias_name_maximum: string;
+		principal_invalid: string;
+		unique_principal: string;
 	};
 	placeholder: {
 		name: string;
 		email: string;
+		principal: string;
+		alias_name: string;
 	};
 	error: {
 		fetch: string;
 		no_userdata_found: string;
 		anonymous_user: string;
 		error: string;
+		principal_conversion_error: string;
 	};
 }
 
