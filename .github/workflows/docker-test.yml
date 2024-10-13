@@ -2,7 +2,7 @@ name: Docker Test
 
 on:
   push:
-    branches: [ main ]
+    branches: [ pocket-ic ]
   pull_request:
     branches: [ main ]
 
