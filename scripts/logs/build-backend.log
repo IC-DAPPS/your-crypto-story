@@ -1,0 +1,8 @@
+error: failed to load manifest for workspace member `/home/vishnulinux/ic-projects/your-crypto-story/src/my-pocket-ic-tests`
+referenced by workspace at `/home/vishnulinux/ic-projects/your-crypto-story/Cargo.toml`
+
+Caused by:
+  failed to read `/home/vishnulinux/ic-projects/your-crypto-story/src/my-pocket-ic-tests/Cargo.toml`
+
+Caused by:
+  No such file or directory (os error 2)

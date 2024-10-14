@@ -1,0 +1,35 @@
+name: Docker Test
+
+on:
+  push:
+    branches: [ pocket-ic ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Build Docker image
+      run: docker build -t my-pocket-ic-tests -f Dockerfile .
+    
+    - name: Run tests in Docker
+      run: docker run my-pocket-ic-tests
+
+  test-podman:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Install Podman
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y podman
+    
+    - name: Build Podman image
+      run: podman build -t my-pocket-ic-tests -f DockerFile .
+    
+    - name: Run tests in Podman
+      run: podman run my-pocket-ic-tests

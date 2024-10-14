@@ -1,0 +1,17 @@
+# Rust-specific ignores
+target/
+**/*.rs.bk
+Cargo.lock
+
+# Git-related files
+.git
+.gitignore
+
+# Editor-specific files
+.vscode/
+.idea/
+
+# Other unnecessary files
+*.log
+*.pem
+*.md

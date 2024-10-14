@@ -1,11 +1,11 @@
 use candid::Principal;
 
-mod error;
-mod model;
-mod storage;
+pub mod error;
+pub mod model;
+pub mod storage;
 
-use error::{DeleteError, GetUserDataError, UpdateError};
-use model::{PrincipalName, UserData};
+pub use error::{DeleteError, GetUserDataError, UpdateError};
+pub use model::{PrincipalName, UserData};
 
 #[ic_cdk::query]
 fn get_userdata() -> Result<UserData, GetUserDataError> {
@@ -59,7 +59,7 @@ fn insert_owned_principals(
     match storage::get_mut(caller) {
         Some(mut user_data) => {
             if owned_principals_arg.len() == 0 {
-                return Ok(());
+                 Ok(())
             } else {
                 for principal_name in owned_principals_arg {
                     user_data.owned_principals.push(principal_name);

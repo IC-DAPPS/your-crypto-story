@@ -1,0 +1,8 @@
+# This line says to automatically detect all files and keep their line endings as LF (Unix style)
+* text=auto eol=lf
+
+# This line is for CMD files. It tells to keep their line endings as CRLF (Windows style)
+*.{cmd,[cC][mM][dD]} text eol=crlf
+
+# This line is for BAT files. It also tells to keep their line endings as CRLF (Windows style)
+*.{bat,[bB][aA][tT]} text eol=crlf

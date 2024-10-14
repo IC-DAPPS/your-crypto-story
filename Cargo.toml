@@ -1,7 +1,21 @@
 [workspace]
-members = [
-    "src/backend",
-]
+members = ["src/backend", "src/my-pocket-ic-tests"]
 resolver = "2"
 
+[workspace.package]
+edition = "2021"
 
+[workspace.dependencies]
+candid = "0.10.9"
+ic-cdk = "0.16.0"
+ic-cdk-macros = "0.16.0"
+serde = { version = "1.0.204", features = ["derive"] }
+ic-stable-structures = "0.6.5"
+getrandom = { version = "0.2.15", features = ["js"] }
+
+# dev-dependency
+ic-agent = { version = "0.37.1", features = ["pem"] }
+lazy_static = "1.5.0"
+pocket-ic = "4.0.0"
+# local-dependency
+backend = { path = "src/backend" }
