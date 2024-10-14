@@ -1,47 +1,66 @@
-<script>
-	import Navbar from 'flowbite-svelte/Navbar.svelte';
-	import NavBrand from 'flowbite-svelte/NavBrand.svelte';
-	import NavLi from 'flowbite-svelte/NavLi.svelte';
-	import NavUl from 'flowbite-svelte/NavUl.svelte';
-	import NavHamburger from 'flowbite-svelte/NavHamburger.svelte';
-	import Button from 'flowbite-svelte/Button.svelte';
+<script lang="ts">
+	import Avatar from '@components/Avatar.svelte';
+	import ButtonWithSpinner from '@components/ButtonWithSpinner.svelte';
+	import { authStore } from '@stores/auth.store';
 	import { page } from '$app/stores';
-	import { authStore } from '$lib/stores/auth.store';
-	import UserMenu from '$lib/components/UserMenu.svelte';
-	import DarkMode from 'flowbite-svelte/DarkMode.svelte';
-	import DarkModeButton from '$lib/components/DarkModeButton.svelte';
-	import { userStore } from '$lib/stores/user.store';
+	import LightAndDarkToggle from '@components/LightAndDarkToggle.svelte';
+	import { signIn } from '@services/auth.service';
+	import { i18n } from '@stores/i18n.store';
 
-	$: activeUrl = $page.url.pathname;
+	const Pages = [
+		{ name: $i18n.navigation.home, link: '/' },
+		{ name: $i18n.navigation.transactions, link: '/transactions/' },
+		{ name: $i18n.navigation.portfolio, link: '/portfolio/' },
+		{ name: $i18n.navigation.story, link: '/story/' }
+	];
 </script>
 
-<Navbar class="border-b border-primary-400">
-	<NavBrand href={$userStore.isRegistered ? '/' : ''}>
-		<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
-			>Your Crypto Story</span
-		>
-	</NavBrand>
-	<div class="flex items-center md:order-2">
-		<DarkModeButton btnClass="hidden md:block p-2 mr-3" />
-		{#if $authStore.isAuthenticated && $userStore.isRegistered}
-			<UserMenu />
-		{:else}
-			<Button on:click={authStore.signIn}>Log in</Button>
-		{/if}
-		<NavHamburger class1="w-full md:flex md:w-auto md:order-1" />
-	</div>
+<nav class=" px-8 py-4">
+	<div>
+		<div class="flex items-center justify-between">
+			<div class="text-2xl font-bold"><a href="/">Y C S</a></div>
 
-	<NavUl {activeUrl}>
-		{#if $userStore.isRegistered}
-			<NavLi href="/" active={true}>Home</NavLi>
-			<NavLi href="/transactions/">Transactions</NavLi>
-			<NavLi href="/portfolio/">Portfolio</NavLi>
-			<NavLi href="/story/">Your story</NavLi>
-		{:else}
-			<NavLi href="/register/">Register</NavLi>
-		{/if}
-		<DarkMode
-			btnClass="hidden max-md:block ml-3 rounded-full p-2 px-6 w-fit border-2 border-primary-200 text-primary-500 dark:border-white dark:text-white"
-		/>
-	</NavUl>
-</Navbar>
+			<ul class="hidden list-none gap-8 md:flex">
+				{#each Pages as { name, link }, index (index)}
+					<li>
+						<a
+							href={link}
+							class="transition-colors duration-200 hover:text-accent-foreground {$page.url
+								.pathname === link
+								? 'font-bold text-primary'
+								: 'font-light text-muted-foreground'}">{name}</a
+						>
+					</li>
+				{/each}
+			</ul>
+
+			{#if $authStore.identity}
+				<Avatar />
+			{:else}
+				<div class="flex items-center gap-4">
+					<LightAndDarkToggle />
+					<ButtonWithSpinner class="w-[68.1px]" onClick={async () => await signIn({})}
+						>{$i18n.auth.text.authenticate}</ButtonWithSpinner
+					>
+				</div>
+			{/if}
+		</div>
+		<div class="overflow-x-auto md:hidden">
+			<ul
+				class="flex list-none justify-center gap-8 whitespace-nowrap pt-4 max-[396px]:justify-start"
+			>
+				{#each Pages as { name, link }, index (index)}
+					<li>
+						<a
+							href={link}
+							class="transition-colors duration-200 hover:text-accent-foreground {$page.url
+								.pathname === link
+								? 'font-bold text-primary'
+								: 'font-light text-muted-foreground'}">{name}</a
+						>
+					</li>
+				{/each}
+			</ul>
+		</div>
+	</div>
+</nav>

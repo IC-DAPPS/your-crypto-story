@@ -1,0 +1,50 @@
+[
+	{
+		"ledgerCanisterId": "tyyy3-4aaaa-aaaaq-aab7a-cai",
+		"indexCanisterId": "efv5g-kqaaa-aaaaq-aacaa-cai",
+		"metadata": {
+			"logo": "/icons/icrc/tyyy3-4aaaa-aaaaq-aab7a-cai.png",
+			"decimals": 8,
+			"name": "Gold Governance Token",
+			"symbol": "GLDGov",
+			"fee": 100000,
+			"max_memo_length": 32
+		}
+	},
+	{
+		"ledgerCanisterId": "2ouva-viaaa-aaaaq-aaamq-cai",
+		"indexCanisterId": "2awyi-oyaaa-aaaaq-aaanq-cai",
+		"metadata": {
+			"logo": "/icons/icrc/2ouva-viaaa-aaaaq-aaamq-cai.png",
+			"decimals": 8,
+			"name": "CHAT",
+			"symbol": "CHAT",
+			"fee": 100000,
+			"max_memo_length": 32
+		}
+	},
+	{
+		"ledgerCanisterId": "ca6gz-lqaaa-aaaaq-aacwa-cai",
+		"indexCanisterId": "co4lr-qaaaa-aaaaq-aacxa-cai",
+		"metadata": {
+			"logo": "/icons/icrc/ca6gz-lqaaa-aaaaq-aacwa-cai.png",
+			"decimals": 8,
+			"name": "ICPSwap Token",
+			"symbol": "ICS",
+			"fee": 1000000,
+			"max_memo_length": 32
+		}
+	},
+	{
+		"ledgerCanisterId": "4c4fd-caaaa-aaaaq-aaa3a-cai",
+		"indexCanisterId": "5ithz-aqaaa-aaaaq-aaa4a-cai",
+		"metadata": {
+			"logo": "/icons/icrc/4c4fd-caaaa-aaaaq-aaa3a-cai.png",
+			"decimals": 8,
+			"name": "GHOST",
+			"symbol": "GHOST",
+			"fee": 100000000,
+			"max_memo_length": 32
+		}
+	}
+]

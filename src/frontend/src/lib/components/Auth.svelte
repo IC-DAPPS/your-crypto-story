@@ -1,5 +1,6 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import { authStore } from '../stores/auth.store';
+	import Button from './ui/button/button.svelte';
 
 	$: isAuthenticated = $authStore.isAuthenticated;
 
@@ -9,7 +10,7 @@
 </script>
 
 {#if isAuthenticated}
-	<button on:click={() => authStore.signOut()} class="secondary">LOGOUT</button>
+	<Button variant="secondary" on:click={() => authStore.signOut()} class="secondary">LOGOUT</Button>
 {:else}
-	<button on:click={() => login()} class="primary">LOGIN</button>
-{/if}
+	<Button on:click={() => login()}>LOGIN</Button>
+{/if} -->

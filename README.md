@@ -1,4 +1,3 @@
-
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
@@ -12,12 +11,14 @@ These instructions will get you a copy of the project up and running on your loc
 ### Setting up the project
 
 1. Clone the repository:
+
    ```
    git clone https://github.com/IC-DAPPS/rust-svelte-gix
    cd rust-svelte-gix
    ```
 
 2. Install dependencies:
+
    ```
    npm install
    ```
@@ -26,7 +27,6 @@ These instructions will get you a copy of the project up and running on your loc
    ```
    npx playwright install --save-dev
    ```
-
 
 ### Running the application locally
 
@@ -40,6 +40,7 @@ These instructions will get you a copy of the project up and running on your loc
 In a new terminal, you can run the tests:
 
 To run all tests:
+
 ```
 npm run test
 ```
@@ -114,4 +115,3 @@ Note: Podman is not officially supported on macOS. If you're using macOS, we rec
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
