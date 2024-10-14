@@ -36,10 +36,10 @@ ENV RUST_LOG=debug
 ENV POCKET_IC_BIN=/usr/local/bin/pocket-ic
 
 # Verify PocketIC installation, save version, and set as environment variable
-RUN pocket-ic --version > /tmp/pocket_ic_version.txt && \
-    echo "PocketIC version: $(cat /tmp/pocket_ic_version.txt)" && \
-    echo "POCKET_IC_VERSION=$(cat /tmp/pocket_ic_version.txt)" >> /etc/environment && \
-    echo "export POCKET_IC_VERSION=$(cat /tmp/pocket_ic_version.txt)" >> ~/.bashrc
+RUN POCKET_IC_VERSION=$(pocket-ic --version) && \
+    echo "PocketIC version: ${POCKET_IC_VERSION}" && \
+    echo "POCKET_IC_VERSION=${POCKET_IC_VERSION}" >> /etc/environment && \
+    echo "export POCKET_IC_VERSION=${POCKET_IC_VERSION}" >> ~/.bashrc
 
 # Run tests
-CMD ["/bin/bash", "-c", "echo PocketIC version: $(cat /tmp/pocket_ic_version.txt) && echo 'Running tests:' && cargo test --package my-pocket-ic-tests -- --nocapture"]
+CMD ["/bin/bash", "-c", "echo PocketIC version: $(pocket-ic --version) && echo 'Running tests:' && cargo test --package my-pocket-ic-tests -- --nocapture"]
